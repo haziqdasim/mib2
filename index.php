@@ -292,98 +292,9 @@ if (file_exists($json_file)) {
                 </div>
             </div>
 
-            <div class="bottom-right-logo-cell">
-                <div class="d-flex bd-highlight mb-3">
-                    
-                    <div class="p-2 bd-highlight">
-                        <div class="card">
-                            <div class="d-flex bd-highlight">
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="home_team_name_en">Mexico</span>
-                                </div>
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter fw-bold" id="home_score">1</span> <span class="text-dark">V</span> <span class="text-dark inter fw-bold" id="away_score">1</span>
-                                </div>
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="away_team_name_en">S. Africa</span>
-                                </div>
-                                
-                            </div>
-                            <div class="d-flex bd-highlight">
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="group"><b>Group Stage</b></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-2 bd-highlight">
-                        <div class="card">
-                            <div class="d-flex bd-highlight">
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="home_team_name_en">Mexico</span>
-                                </div>
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter fw-bold" id="home_score">1</span> <span class="text-dark">V</span> <span class="text-dark inter fw-bold" id="away_score">1</span>
-                                </div>
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="away_team_name_en">S. Africa</span>
-                                </div>
-                                
-                            </div>
-                            <div class="d-flex bd-highlight">
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="group"><b>Group Stage</b></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-2 bd-highlight">
-                        <div class="card">
-                            <div class="d-flex bd-highlight">
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="home_team_name_en">Mexico</span>
-                                </div>
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter fw-bold" id="home_score">1</span> <span class="text-dark">V</span> <span class="text-dark inter fw-bold" id="away_score">1</span>
-                                </div>
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="away_team_name_en">S. Africa</span>
-                                </div>
-                                
-                            </div>
-                            <div class="d-flex bd-highlight">
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="group"><b>Group Stage</b></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-2 bd-highlight">
-                        <div class="card">
-                            <div class="d-flex bd-highlight">
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="home_team_name_en">Mexico</span>
-                                </div>
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter fw-bold" id="home_score">1</span> <span class="text-dark">V</span> <span class="text-dark inter fw-bold" id="away_score">1</span>
-                                </div>
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="away_team_name_en">S. Africa</span>
-                                </div>
-                                
-                            </div>
-                            <div class="d-flex bd-highlight">
-                                <div class="py-1 px-3 flex-fill bd-highlight">
-                                    <span class="text-dark inter" id="group"><b>Group Stage</b></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
+            <div class="bottom-right-logo-cell" style="width: auto;">
+                <div class="d-flex bd-highlight mb-3" id="live-scores-container">
+                    <!-- Live score cards rendered by JavaScript -->
                 </div>
             </div>
         </div>
@@ -432,6 +343,81 @@ if (file_exists($json_file)) {
                 }
             });
         }, 3000); // Polls system updates safely every 3 seconds
+
+        // --- Live Score Ticker from worldcup26.ir API ---
+
+        function getStageLabel(game) {
+            const typeMap = {
+                'group': 'Group ' + game.group,
+                'r32':   'Round of 32',
+                'r16':   'Round of 16',
+                'qf':    'Quarter-Final',
+                'sf':    'Semi-Final',
+                'third': '3rd Place',
+                'final': 'Final'
+            };
+            return typeMap[game.type] || game.group || 'Match';
+        }
+
+        function buildScoreCard(game, index) {
+            const homeTeam = game.home_team_name_en || game.home_team_label || '?';
+            const awayTeam = game.away_team_name_en || game.away_team_label || '?';
+            const homeScore = game.home_score !== undefined ? game.home_score : '-';
+            const awayScore = game.away_score !== undefined ? game.away_score : '-';
+            const stage = getStageLabel(game);
+
+            return `
+                <div class="p-2 bd-highlight">
+                    <div class="card">
+                        <div class="d-flex bd-highlight">
+                            <div class="py-1 px-3 flex-fill bd-highlight">
+                                <span class="text-dark inter" id="home_team_name_en_${index}">${homeTeam}</span>
+                            </div>
+                            <div class="py-1 px-3 flex-fill bd-highlight">
+                                <span class="text-dark inter fw-bold" id="home_score_${index}">${homeScore}</span>
+                                <span class="text-dark">V</span>
+                                <span class="text-dark inter fw-bold" id="away_score_${index}">${awayScore}</span>
+                            </div>
+                            <div class="py-1 px-3 flex-fill bd-highlight">
+                                <span class="text-dark inter" id="away_team_name_en_${index}">${awayTeam}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex bd-highlight">
+                            <div class="py-1 px-3 flex-fill bd-highlight">
+                                <span class="text-dark inter" id="stage_${index}"><b>${stage}</b></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function fetchLiveScores() {
+            console.log("Here");
+            fetch('proxy.php')
+                .then(response => response.json())
+                .then(data => {
+                console.log(data);
+                    const games = data.games || [];
+
+                    // Prefer in-progress games; fallback to not-started ones
+                    const inProgress = games.filter(g => g.time_elapsed && g.time_elapsed !== 'notstarted' && g.finished !== 'TRUE');
+                    const notStarted = games.filter(g => g.time_elapsed === 'notstarted' && g.finished !== 'TRUE');
+
+                    const selected = inProgress.length >= 4
+                        ? inProgress.slice(0, 4)
+                        : [...inProgress, ...notStarted].slice(0, 4);
+
+                    const container = document.getElementById('live-scores-container');
+                    if (container && selected.length > 0) {
+                        container.innerHTML = selected.map((game, i) => buildScoreCard(game, i)).join('');
+                    }
+                })
+                .catch(err => console.error('Live score fetch failed:', err));
+        }
+
+        // Fetch immediately on load, then every 30 seconds
+        fetchLiveScores();
+        setInterval(fetchLiveScores, 30000);
     </script>
 </body>
 
