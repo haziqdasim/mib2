@@ -295,22 +295,23 @@ if (file_exists($json_file)) {
             <div class="bottom-right-logo-cell">
                 <div class="d-flex bd-highlight mb-3">
                     
-                    <!-- <div class="p-2 bd-highlight">
+                    <div class="p-2 bd-highlight">
                         <div class="card">
                             <div class="d-flex bd-highlight">
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <img src="assets/flag/mexico.png" alt="flag">
-                                    <span class="text-dark inter">Mexico</span>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="home_team_name_en">Mexico</span>
                                 </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <span class="text-dark inter fw-bold">1 V 1</span>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter fw-bold" id="home_score">1</span> <span class="text-dark">V</span> <span class="text-dark inter fw-bold" id="away_score">1</span>
                                 </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <img src="assets/flag/southafrica.png" alt="flag">
-                                    <span class="text-dark inter">S. Africa</span>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="away_team_name_en">S. Africa</span>
                                 </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <span class="text-dark inter"><b>Group Stage</b> | Fri, 12 Jun, 3:00am</span>
+                                
+                            </div>
+                            <div class="d-flex bd-highlight">
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="group"><b>Group Stage</b></span>
                                 </div>
                             </div>
                         </div>
@@ -319,44 +320,69 @@ if (file_exists($json_file)) {
                     <div class="p-2 bd-highlight">
                         <div class="card">
                             <div class="d-flex bd-highlight">
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <img src="assets/flag/mexico.png" alt="flag">
-                                    <span class="text-dark inter">Mexico</span>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="home_team_name_en">Mexico</span>
                                 </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <span class="text-dark inter fw-bold">1 V 1</span>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter fw-bold" id="home_score">1</span> <span class="text-dark">V</span> <span class="text-dark inter fw-bold" id="away_score">1</span>
                                 </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <img src="assets/flag/southafrica.png" alt="flag">
-                                    <span class="text-dark inter">S. Africa</span>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="away_team_name_en">S. Africa</span>
                                 </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <span class="text-dark inter"><b>Group Stage</b> | Fri, 12 Jun, 3:00am</span>
+                                
+                            </div>
+                            <div class="d-flex bd-highlight">
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="group"><b>Group Stage</b></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2 bd-highlight">
+                        <div class="card">
+                            <div class="d-flex bd-highlight">
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="home_team_name_en">Mexico</span>
+                                </div>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter fw-bold" id="home_score">1</span> <span class="text-dark">V</span> <span class="text-dark inter fw-bold" id="away_score">1</span>
+                                </div>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="away_team_name_en">S. Africa</span>
+                                </div>
+                                
+                            </div>
+                            <div class="d-flex bd-highlight">
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="group"><b>Group Stage</b></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2 bd-highlight">
+                        <div class="card">
+                            <div class="d-flex bd-highlight">
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="home_team_name_en">Mexico</span>
+                                </div>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter fw-bold" id="home_score">1</span> <span class="text-dark">V</span> <span class="text-dark inter fw-bold" id="away_score">1</span>
+                                </div>
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="away_team_name_en">S. Africa</span>
+                                </div>
+                                
+                            </div>
+                            <div class="d-flex bd-highlight">
+                                <div class="py-1 px-3 flex-fill bd-highlight">
+                                    <span class="text-dark inter" id="group"><b>Group Stage</b></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="p-2 bd-highlight">
-                        <div class="card">
-                            <div class="d-flex bd-highlight">
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <img src="assets/flag/mexico.png" alt="flag">
-                                    <span class="text-dark inter">Mexico</span>
-                                </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <span class="text-dark inter fw-bold">1 V 1</span>
-                                </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <img src="assets/flag/southafrica.png" alt="flag">
-                                    <span class="text-dark inter">S. Africa</span>
-                                </div>
-                                <div class="p-2 flex-fill bd-highlight">
-                                    <span class="text-dark inter"><b>Group Stage</b> | Fri, 12 Jun, 3:00am</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     
                 </div>
             </div>
