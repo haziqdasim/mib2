@@ -132,8 +132,8 @@ if (file_exists($json_file)) {
             background-size: cover;
             background-repeat: no-repeat;
             box-shadow: 
-            inset 4px 4px 30px rgba(0, 0, 0, 0.5), 
-            inset -4px -4px 30px rgba(0, 0, 0, 0.5);
+            inset 4px 4px 30px rgba(0, 0, 0, 0.1), 
+            inset -4px -4px 30px rgba(0, 0, 0, 0.1);
         }
 
         /* Bottom Live Score Ticker Layout */
@@ -211,7 +211,10 @@ if (file_exists($json_file)) {
             width: 70px;
             vertical-align: middle;
             text-align: center;
-            background-color: #000000;
+            background-image: url(assets/bg-lowerbar.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
         }
 
         .mini-logo-img {
@@ -292,7 +295,7 @@ if (file_exists($json_file)) {
             <div class="bottom-right-logo-cell">
                 <div class="d-flex bd-highlight mb-3">
                     
-                    <div class="p-2 bd-highlight">
+                    <!-- <div class="p-2 bd-highlight">
                         <div class="card">
                             <div class="d-flex bd-highlight">
                                 <div class="p-2 flex-fill bd-highlight">
@@ -353,7 +356,7 @@ if (file_exists($json_file)) {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     
                 </div>
             </div>
