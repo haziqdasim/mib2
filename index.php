@@ -215,60 +215,60 @@ $live_image = file_exists($config_file) ? trim(file_get_contents($config_file)) 
                 <h5 class="text-white mt-5">World Cup Matches</h5>
                 
                 <div class="card mb-3" style="border-radius: 10px;">
-                    <div class="card-header text-white inter fw-bold dark-red" id="group">Group Stage</div>
+                    <div class="card-header text-white inter fw-bold dark-red" id="stage">Group Stage</div>
                     <div class="card-body text-dark">
                         <div class="row">
                             <div class="col-md-7">
-                                <span class="inter" id="home_team_id">Mexico</span><br>
-                                <span class="inter" id="away_team_id">South Africa</span>
+                                <span class="inter" id="home_team">Mexico</span><br>
+                                <span class="inter" id="away_team">South Africa</span>
                             </div>
                             <div class="col-md-5">
-                                <span class="inter" id="local_date">Fri, 12 Jun<br>3:00am</span>
+                                <span class="inter" id="malaysia_time">Fri, 12 Jun<br>3:00am</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card mb-3" style="border-radius: 10px;">
-                    <div class="card-header text-white inter fw-bold red" id="group">Group Stage</div>
+                    <div class="card-header text-white inter fw-bold red" id="stage">Group Stage</div>
                     <div class="card-body text-dark">
                     <div class="row">
                             <div class="col-md-7">
-                                <span class="inter" id="home_team_id">Mexico</span><br>
-                                <span class="inter" id="away_team_id">South Africa</span>
+                                <span class="inter" id="home_team">Mexico</span><br>
+                                <span class="inter" id="away_team">South Africa</span>
                             </div>
                             <div class="col-md-5">
-                                <span class="inter" id="local_date">Fri, 12 Jun<br>3:00am</span>
+                                <span class="inter" id="malaysia_time">Fri, 12 Jun<br>3:00am</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card mb-3" style="border-radius: 10px;">
-                    <div class="card-header text-white inter fw-bold green" id="group">Group Stage</div>
+                    <div class="card-header text-white inter fw-bold green" id="stage">Group Stage</div>
                     <div class="card-body text-dark">
                     <div class="row">
                             <div class="col-md-7">
-                                <span class="inter" id="home_team_id">Mexico</span><br>
-                                <span class="inter" id="away_team_id">South Africa</span>
+                                <span class="inter" id="home_team">Mexico</span><br>
+                                <span class="inter" id="away_team">South Africa</span>
                             </div>
                             <div class="col-md-5">
-                                <span class="inter" id="local_date">Fri, 12 Jun<br>3:00am</span>
+                                <span class="inter" id="malaysia_time">Fri, 12 Jun<br>3:00am</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card mb-3" style="border-radius: 10px;">
-                    <div class="card-header text-white inter fw-bold dark-green" id="group">Group Stage</div>
+                    <div class="card-header text-white inter fw-bold dark-green" id="stage">Group Stage</div>
                     <div class="card-body text-dark">
                     <div class="row">
                             <div class="col-md-7">
-                                <span class="inter" id="home_team_id">Mexico</span><br>
-                                <span class="inter" id="away_team_id">South Africa</span>
+                                <span class="inter" id="home_team">Mexico</span><br>
+                                <span class="inter" id="away_team">South Africa</span>
                             </div>
                             <div class="col-md-5">
-                                <span class="inter" id="local_date">Fri, 12 Jun<br>3:00am</span>
+                                <span class="inter" id="malaysia_time">Fri, 12 Jun<br>3:00am</span>
                             </div>
                         </div>
                     </div>
