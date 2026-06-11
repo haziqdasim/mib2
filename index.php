@@ -392,23 +392,19 @@ if (file_exists($json_file)) {
         }
 
         function fetchLiveScores() {
-            console.log("Here");
             fetch('proxy.php')
                 .then(response => response.json())
                 .then(data => {
-                console.log(data);
                     const games = data.games || [];
 
-                    // Prefer in-progress games; fallback to not-started ones
-                    const inProgress = games.filter(g => g.time_elapsed && g.time_elapsed !== 'notstarted' && g.finished !== 'TRUE');
-                    const notStarted = games.filter(g => g.time_elapsed === 'notstarted' && g.finished !== 'TRUE');
-
-                    const selected = inProgress.length >= 4
-                        ? inProgress.slice(0, 4)
-                        : [...inProgress, ...notStarted].slice(0, 4);
+                    // Only show games that have started (in-progress OR finished).
+                    // 'notstarted' games are hidden entirely from the ticker.
+                    const selected = games
+                        .filter(g => g.time_elapsed && g.time_elapsed !== 'notstarted')
+                        .slice(0, 4);
 
                     const container = document.getElementById('live-scores-container');
-                    if (container && selected.length > 0) {
+                    if (container) {
                         container.innerHTML = selected.map((game, i) => buildScoreCard(game, i)).join('');
                     }
                 })
