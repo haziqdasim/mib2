@@ -63,24 +63,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['imageUpload'])) {
     }
 }
 
-// Handle Set Live Action Command Requests
-if (isset($_GET['set_live'])) {
-    $live_file = basename($_GET['set_live']);
-    if (file_exists($upload_dir . $live_file)) {
-        file_put_contents($config_file, $live_file);
-    }
-}
-
 // Handle single-action immediate file removal requests
 if (isset($_GET['delete'])) {
     $file_to_delete = basename($_GET['delete']);
     $full_delete_path = $upload_dir . $file_to_delete;
 
-    if (file_exists($full_delete_path) && $file_to_delete !== '10.png') {
+    if (file_exists($full_delete_path)) {
         unlink($full_delete_path);
 
-        // If we deleted the currently active live slide, fall back to default baseline image
-        if (file_get_contents($config_file) === $file_to_delete) {
+        // If the fallback reference configuration mirrors the deleted file, sync a refresh fallback flag
+        if (file_exists($config_file) && trim(file_get_contents($config_file)) === $file_to_delete) {
             file_put_contents($config_file, '10.png');
         }
 
@@ -89,14 +81,12 @@ if (isset($_GET['delete'])) {
     }
 }
 
-// Fetch the currently active file mapping pointer to display badges
-$current_live_image = file_get_contents($config_file);
-$current_interval = file_get_contents($interval_file);
+// Fetch active interval tracking configurations
+$current_interval = file_exists($interval_file) ? file_get_contents($interval_file) : '5';
 
 // Scan the current directory configuration folder values
 $active_slides = array_diff(scandir($upload_dir), array('.', '..'));
-// Reset array keys cleanly
-$active_slides = array_values($active_slides);
+$active_slides = array_values($active_slides); // Reset array keys cleanly
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -198,7 +188,7 @@ $active_slides = array_values($active_slides);
                 <span class="fs-5 tracking-wider text-uppercase">FWC Multipurpose Information Board</span>
             </a>
             <div class="d-flex align-items-center">
-                <span class="badge bg-danger p-2 inter me-2"><i class="bi bi-broadcast me-1"></i> Live Mode
+                <span class="badge bg-danger p-2 inter me-2"><i class="bi bi-broadcast me-1"></i> Carousel Loop
                     Active</span>
                 <a href="index.php" class="btn btn-outline-light btn-sm inter text-uppercase tracking-wider px-3"
                     style="font-size: 0.82rem; font-weight:600;">
@@ -290,16 +280,13 @@ $active_slides = array_values($active_slides);
                             <thead>
                                 <tr>
                                     <th scope="col" width="20%">Thumbnail Preview</th>
-                                    <th scope="col" width="40%">File Path Identifier Location</th>
-                                    <th scope="col" width="15%">Live Status</th>
+                                    <th scope="col" width="55%">File Path Identifier Location</th>
                                     <th scope="col" width="25%" class="text-end">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (count($active_slides) > 0): ?>
-                                    <?php foreach ($active_slides as $slide):
-                                        $is_live = ($slide === $current_live_image);
-                                        ?>
+                                    <?php foreach ($active_slides as $slide): ?>
                                         <tr>
                                             <td>
                                                 <img src="<?php echo $upload_dir . $slide; ?>"
@@ -308,47 +295,22 @@ $active_slides = array_values($active_slides);
                                             </td>
                                             <td>
                                                 <span class="fw-bold text-truncate d-inline-block"
-                                                    style="max-width: 240px;"><?php echo $slide; ?></span><br>
+                                                    style="max-width: 320px;"><?php echo $slide; ?></span><br>
                                                 <small class="text-muted"><?php echo $upload_dir . $slide; ?></small>
                                             </td>
-                                            <td>
-                                                <?php if ($is_live): ?>
-                                                    <span class="badge bg-danger text-white"><i class="bi bi-eye-fill me-1"></i>
-                                                        Live Now</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-secondary text-light">Inactive</span>
-                                                <?php endif; ?>
-                                            </td>
                                             <td class="text-end">
-                                                <?php if (!$is_live): ?>
-                                                    <a href="dashboard.php?set_live=<?php echo urlencode($slide); ?>"
-                                                        class="btn btn-sm btn-dark-green me-1"
-                                                        title="Set Live onto Main View Panel">
-                                                        <i class="bi bi-play-circle-fill me-1"></i> Set Live
-                                                    </a>
-                                                <?php else: ?>
-                                                    <button class="btn btn-sm btn-success me-1" disabled><i
-                                                            class="bi bi-check-circle-fill me-1"></i> Active</button>
-                                                <?php endif; ?>
-
-                                                <?php if ($slide !== '10.png'): ?>
-                                                    <a href="dashboard.php?delete=<?php echo urlencode($slide); ?>"
-                                                        class="btn btn-sm btn-dark-red"
-                                                        onclick="return confirm('Are you sure you want to delete this media element permanently?')"
-                                                        title="Delete File">
-                                                        <i class="bi bi-trash-fill"></i>
-                                                    </a>
-                                                <?php else: ?>
-                                                    <button class="btn btn-sm btn-outline-secondary" disabled
-                                                        title="System Default Asset Base Lock"><i
-                                                            class="bi bi-lock-fill"></i></button>
-                                                <?php endif; ?>
+                                                <a href="dashboard.php?delete=<?php echo urlencode($slide); ?>"
+                                                    class="btn btn-sm btn-dark-red p-2 px-3 fw-bold rounded-3"
+                                                    onclick="return confirm('Are you sure you want to delete this media element permanently?')"
+                                                    title="Delete File">
+                                                    <i class="bi bi-trash-fill me-1"></i> Delete
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="4" class="text-center py-5 text-muted">No images are in the folder
+                                        <td colspan="3" class="text-center py-5 text-muted">No images are in the folder
                                             queue directory locations. Upload file content to view here.</td>
                                     </tr>
                                 <?php endif; ?>

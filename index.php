@@ -244,7 +244,7 @@ if (file_exists($json_file)) {
                 </div>
             </div>
 
-            <div class="carousel-cell" id="main-carousel-board" style="background-image: url('assets/slide/<?php echo htmlspecialchars($live_image); ?>');">
+            <div class="carousel-cell" id="main-carousel-board" style="background-image: url('assets/slide/<?php echo count($all_slides) > 0 ? htmlspecialchars($all_slides[0]) : '10.png'; ?>');">
             </div>
         </div>
 
@@ -258,7 +258,7 @@ if (file_exists($json_file)) {
 
             <div class="bottom-right-logo-cell">
                 <div class="d-flex bd-highlight mb-3" id="live-scores-container">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -271,17 +271,18 @@ if (file_exists($json_file)) {
         // Inject server-side structural variables safely into the client tracking environment
         let slideCollection = <?php echo json_encode($all_slides); ?>;
         let currentIntervalDelay = <?php echo $carousel_seconds * 1000; ?>;
-        let activeImagePointer = "<?php echo htmlspecialchars($live_image); ?>";
         
-        let currentSlideIndex = slideCollection.indexOf(activeImagePointer);
-        if (currentSlideIndex === -1) currentSlideIndex = 0;
-
+        let currentSlideIndex = 0;
         let carouselIntervalTimer = null;
 
         // Auto-run carousel rotation function
         function startCarouselLoop() {
             if (carouselIntervalTimer) clearInterval(carouselIntervalTimer);
-            if (slideCollection.length <= 1) return; // Do not loop if only 1 image exists
+            if (slideCollection.length <= 1) {
+                const fallbackImage = slideCollection[0] || '10.png';
+                document.getElementById('main-carousel-board').style.backgroundImage = `url('assets/slide/${fallbackImage}')`;
+                return; 
+            }
 
             carouselIntervalTimer = setInterval(() => {
                 currentSlideIndex = (currentSlideIndex + 1) % slideCollection.length;
@@ -336,7 +337,6 @@ if (file_exists($json_file)) {
                 const doc = parser.parseFromString(html, 'text/html');
                 
                 // Read fresh inline JS arrays directly from data attributes or script extractions dynamically
-                // We parse the DOM variables to check if assets or interval parameters have changed in the backend
                 const scriptText = html;
                 const matchSlides = scriptText.match(/let slideCollection = (\[.*?\]);/);
                 const matchDelay = scriptText.match(/let currentIntervalDelay = ([0-9]+);/);
