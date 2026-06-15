@@ -132,8 +132,8 @@ if (file_exists($json_file)) {
             background-size: cover;
             background-repeat: no-repeat;
             box-shadow: 
-            inset 4px 4px 30px rgba(0, 0, 0, 0.1), 
-            inset -4px -4px 30px rgba(0, 0, 0, 0.1);
+            inset 4px 4px 30px rgba(0, 0, 0, 0.2), 
+            inset -4px -4px 30px rgba(0, 0, 0, 0.2);
         }
 
         /* Bottom Live Score Ticker Layout */
@@ -185,6 +185,11 @@ if (file_exists($json_file)) {
             flex-shrink: 0;
             box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
         }
+        
+        .livescore-card{
+            background-color: white;
+            border-radius: 5px 20px 5px;
+        }
 
         .ticker-team-text {
             font-weight: 500;
@@ -222,12 +227,12 @@ if (file_exists($json_file)) {
             width: auto;
         }
 
-        .red{ background-color: #D40101; border-radius: 10px; }
-        .dark-red{ background-color: #731311; border-radius: 10px; }
-        .green{ background-color: #00C953; border-radius: 10px; }
-        .dark-green{ background-color: #004E3C; border-radius: 10px; }
+        .red{ background-color: #D40101; border-radius: 5px 20px 5px; }
+        .dark-red{ background-color: #731311; border-radius: 5px 20px 5px; }
+        .green{ background-color: #00C953; border-radius: 5px 20px 5px; }
+        .dark-green{ background-color: #004E3C; border-radius: 5px 20px 5px; }
         .card{ border: none; }
-        .card-header:first-child{ border-radius: 9px 9px 0 0; }
+        .card-header:first-child{ border-radius: 5px 19px 0 0; }
     </style>
 </head>
 
@@ -266,7 +271,7 @@ if (file_exists($json_file)) {
                             $formatted_time = htmlspecialchars($time_str);
                         }
                     ?>
-                    <div class="card mb-3" style="border-radius: 10px;">
+                    <div class="card mb-3" style="border-radius: 5px 20px 5px;">
                         <div class="card-header text-white inter fw-bold <?php echo $color; ?>" id="stage"><?php echo htmlspecialchars($match['stage']); ?></div>
                         <div class="card-body text-dark">
                             <div class="row">
@@ -391,14 +396,14 @@ if (file_exists($json_file)) {
 
             return `
                 <div class="p-2 bd-highlight">
-                    <div class="card">
+                    <div class="livescore-card">
                         <div class="d-flex bd-highlight">
                             <div class="py-1 px-3 flex-fill bd-highlight">
                                 <span class="text-dark inter" id="home_team_name_en_${index}">${homeTeam}</span>
                             </div>
                             <div class="py-1 px-3 flex-fill bd-highlight">
                                 <span class="text-dark inter fw-bold" id="home_score_${index}">${homeScore}</span>
-                                <span class="text-dark">V</span>
+                                <span class="text-dark">-</span>
                                 <span class="text-dark inter fw-bold" id="away_score_${index}">${awayScore}</span>
                             </div>
                             <div class="py-1 px-3 flex-fill bd-highlight">
