@@ -6,11 +6,13 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 $config_file = 'active_slide.txt';
 $interval_file = 'carousel_interval.txt';
 $transition_file = 'carousel_transition.txt';
+$duration_file = 'carousel_duration.txt'; // Added configuration setting
 $upload_dir = 'assets/slide/';
 
 $live_image = file_exists($config_file) ? trim(file_get_contents($config_file)) : '10.png';
 $carousel_seconds = file_exists($interval_file) ? intval(trim(file_get_contents($interval_file))) : 5;
 $carousel_animation = file_exists($transition_file) ? trim(file_get_contents($transition_file)) : 'dissolve';
+$carousel_speed = file_exists($duration_file) ? floatval(trim(file_get_contents($duration_file))) : 0.85;
 
 // Collect all slides in directory to establish the javascript carousel collection map
 $all_slides = [];
@@ -151,6 +153,7 @@ if (file_exists($json_file)) {
             background-repeat: no-repeat;
             backface-visibility: hidden;
             transform-style: preserve-3d;
+            /* Transition speed is now controlled dynamically in Javascript inline style hooks */
             transition: all 0.85s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 1;
         }
@@ -165,7 +168,7 @@ if (file_exists($json_file)) {
         .anim-dissolve .slide-layer.outgoing { opacity: 0; }
         .anim-dissolve .slide-layer.incoming { opacity: 1; }
 
-        /* 2. Fade Animation (New Requirement) */
+        /* 2. Fade Animation */
         .anim-fade .slide-layer.outgoing { opacity: 0; transform: scale(1); }
         .anim-fade .slide-layer.incoming { opacity: 1; transform: scale(1); }
         .anim-fade .slide-layer.initial-hidden { opacity: 0; transform: scale(1); }
@@ -342,10 +345,20 @@ if (file_exists($json_file)) {
         let slideCollection = <?php echo json_encode($all_slides); ?>;
         let currentIntervalDelay = <?php echo $carousel_seconds * 1000; ?>;
         let activeTransitionFX = "<?php echo $carousel_animation; ?>";
+        let activeTransitionSpeed = <?php echo $carousel_speed; ?>; // Dynamic duration value initialized
         
         let currentSlideIndex = 0;
         let carouselIntervalTimer = null;
         let currentActiveLayer = 'alpha';
+
+        function applyDynamicDurationStyles() {
+            const layerAlpha = document.getElementById('layer-alpha');
+            const layerBeta = document.getElementById('layer-beta');
+            const durationStyleValue = `all ${activeTransitionSpeed}s cubic-bezier(0.25, 1, 0.5, 1)`;
+            
+            if (layerAlpha) layerAlpha.style.transition = durationStyleValue;
+            if (layerBeta) layerBeta.style.transition = durationStyleValue;
+        }
 
         function startCarouselLoop() {
             if (carouselIntervalTimer) clearInterval(carouselIntervalTimer);
@@ -355,6 +368,7 @@ if (file_exists($json_file)) {
             const layerBeta = document.getElementById('layer-beta');
 
             board.className = "carousel-cell anim-" + activeTransitionFX;
+            applyDynamicDurationStyles();
 
             if (slideCollection.length === 0) slideCollection = ['10.png'];
 
@@ -391,7 +405,7 @@ if (file_exists($json_file)) {
                     } else {
                         layerBeta.className = "slide-layer initial-hidden";
                     }
-                }, 850);
+                }, (activeTransitionSpeed * 1000)); // Dynamic timeout map sync
                 
             }, currentIntervalDelay);
         }
@@ -432,6 +446,7 @@ if (file_exists($json_file)) {
         }
         scheduleMatchExpiryReload();
 
+        // 3-Second Self Polling Configurations Sync Layer
         setInterval(() => {
             fetch(window.location.href)
             .then(response => response.text())
@@ -443,19 +458,23 @@ if (file_exists($json_file)) {
                 const matchSlides = scriptText.match(/let slideCollection = (\[.*?\]);/);
                 const matchDelay = scriptText.match(/let currentIntervalDelay = ([0-9]+);/);
                 const matchFX = scriptText.match(/let activeTransitionFX = "(.*?)";/);
+                const matchSpeed = scriptText.match(/let activeTransitionSpeed = ([0-9.]+);/); // Polling parser addition
 
-                if (matchSlides && matchDelay && matchFX) {
+                if (matchSlides && matchDelay && matchFX && matchSpeed) {
                     const newSlides = JSON.parse(matchSlides[1]);
                     const newDelay = parseInt(matchDelay[1]);
                     const newFX = matchFX[1];
+                    const newSpeed = parseFloat(matchSpeed[1]);
 
                     if (JSON.stringify(newSlides) !== JSON.stringify(slideCollection) || 
                         newDelay !== currentIntervalDelay || 
-                        newFX !== activeTransitionFX) {
+                        newFX !== activeTransitionFX ||
+                        newSpeed !== activeTransitionSpeed) {
                         
                         slideCollection = newSlides;
                         currentIntervalDelay = newDelay;
                         activeTransitionFX = newFX;
+                        activeTransitionSpeed = newSpeed;
                         currentSlideIndex = 0;
                         currentActiveLayer = 'alpha';
                         startCarouselLoop();

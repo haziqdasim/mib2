@@ -4,6 +4,7 @@ $upload_dir = 'assets/slide/';
 $config_file = 'active_slide.txt';
 $interval_file = 'carousel_interval.txt';
 $transition_file = 'carousel_transition.txt';
+$duration_file = 'carousel_duration.txt'; // New configuration track
 
 // Ensure directory exists safely on target servers
 if (!is_dir($upload_dir)) {
@@ -25,18 +26,24 @@ if (!file_exists($transition_file)) {
     file_put_contents($transition_file, 'dissolve');
 }
 
+// Default animation duration configuration setting (Default: 0.85 seconds)
+if (!file_exists($duration_file)) {
+    file_put_contents($duration_file, '0.85');
+}
+
 $message = "";
 $message_type = "";
 
 // Handle Carousel Configuration Form Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $sync_success = false;
+
     // 1. Handle Interval Settings
     if (isset($_POST['carousel_interval'])) {
         $interval_val = intval($_POST['carousel_interval']);
         if ($interval_val >= 1) {
             file_put_contents($interval_file, $interval_val);
-            $message = "Carousel configurations successfully synchronized.";
-            $message_type = "success";
+            $sync_success = true;
         } else {
             $message = "Error: Timing value must be at least 1 second.";
             $message_type = "danger";
@@ -48,9 +55,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $allowed_transitions = ['dissolve', 'fade', 'cube', 'gallery', 'slide-left', 'slide-right'];
         if (in_array($_POST['carousel_transition'], $allowed_transitions)) {
             file_put_contents($transition_file, $_POST['carousel_transition']);
-            $message = "Carousel configurations successfully synchronized.";
-            $message_type = "success";
+            $sync_success = true;
         }
+    }
+
+    // 3. Handle Transition Duration Speed Selection
+    if (isset($_POST['carousel_duration'])) {
+        $duration_val = floatval($_POST['carousel_duration']);
+        if ($duration_val >= 0 && $duration_val <= 3) {
+            file_put_contents($duration_file, $duration_val);
+            $sync_success = true;
+        }
+    }
+
+    if ($sync_success && empty($message)) {
+        $message = "Carousel configurations successfully synchronized.";
+        $message_type = "success";
     }
 }
 
@@ -103,6 +123,7 @@ if (isset($_GET['delete'])) {
 // Fetch active carousel metrics
 $current_interval = file_exists($interval_file) ? trim(file_get_contents($interval_file)) : '5';
 $current_transition = file_exists($transition_file) ? trim(file_get_contents($transition_file)) : 'dissolve';
+$current_duration = file_exists($duration_file) ? trim(file_get_contents($duration_file)) : '0.85';
 
 // Scan the current directory configuration folder values
 $active_slides = array_diff(scandir($upload_dir), array('.', '..'));
@@ -192,7 +213,7 @@ $active_slides = array_values($active_slides); // Reset array keys cleanly
 
         <div class="row g-4">
             
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <div class="card admin-card p-4">
                     <h4 class="mb-4 text-white"><i class="bi bi-cloud-arrow-up me-2 text-danger"></i>Upload New Slide Media</h4>
                     
@@ -223,32 +244,29 @@ $active_slides = array_values($active_slides); // Reset array keys cleanly
                 </div>
             </div>
 
-            <div class="col-lg-7">
+            <div class="col-lg-8">
                 <div class="card admin-card p-4 h-100">
-                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
                         <h4 class="mb-0 text-white"><i class="bi bi-images me-2 text-success"></i>Current Board Assets</h4>
                         
                         <div class="d-flex align-items-center gap-2">
-                            <form action="dashboard.php" method="POST" class="d-flex align-items-center bg-dark rounded border border-secondary p-1 gap-1">
-                                <div class="input-group input-group-sm" style="max-width: 200px;">
-                                    <span class="input-group-text bg-transparent border-0 text-muted small inter px-2">Interval:</span>
+                            <form action="dashboard.php" method="POST" class="d-flex align-items-center bg-dark rounded border border-secondary p-1 gap-1 flex-wrap">
+                                <div class="input-group input-group-sm align-items-center" style="max-width: 180px;">
+                                    <span class="input-group-text bg-transparent border-0 text-muted small inter px-2">Loop</span>
                                     <div data-bs-theme="dark">
-                                        <!-- input -->
-                                        <input type="number" class="inter form-control form-control-sm text-center"
+                                        <input type="number" class="inter form-control form-control-sm text-center bg-dark text-white border-secondary"
                                             name="carousel_interval"
                                             value="<?php echo htmlspecialchars($current_interval); ?>" min="1" required
-                                            style="width: 50px;">
+                                            style="width: 55px;">
                                     </div>
-                                    <span class="input-group-text bg-transparent border-0 text-white small inter pe-1">seconds/s</span>
+                                    <span class="input-group-text bg-transparent border-0 text-white small inter">second/s</span>
                                 </div>
                                 
-                                <div class="border-start border-secondary" style="height: 20px;"></div>
+                                <div class="border-start border-secondary d-none d-sm-block" style="height: 20px;"></div>
 
-                                <div class="input-group input-group-sm" style="max-width: 1000px;">
-                                    <span class="input-group-text bg-transparent border-0 text-muted small inter px-2">Transition</i></span>
-                                    
-                                    <!-- input -->
-                                    <select class="inter form-control form-control-sm" name="carousel_transition">
+                                <div class="input-group input-group-sm align-items-center me-2" style="max-width: 180px;">
+                                    <span class="input-group-text bg-transparent border-0 text-muted small inter px-2">Transition</span>
+                                    <select class="inter form-control form-control-sm bg-dark text-white border-secondary" name="carousel_transition">
                                         <option value="dissolve" <?php echo $current_transition === 'dissolve' ? 'selected' : ''; ?>>Dissolve</option>
                                         <option value="fade" <?php echo $current_transition === 'fade' ? 'selected' : ''; ?>>Fade</option>
                                         <option value="cube" <?php echo $current_transition === 'cube' ? 'selected' : ''; ?>>Cube</option>
@@ -256,10 +274,22 @@ $active_slides = array_values($active_slides); // Reset array keys cleanly
                                         <option value="slide-left" <?php echo $current_transition === 'slide-left' ? 'selected' : ''; ?>>Slide Left</option>
                                         <option value="slide-right" <?php echo $current_transition === 'slide-right' ? 'selected' : ''; ?>>Slide Right</option>
                                     </select>
-                                    <button class="btn btn-dark-green btn-sm rounded ms-2 px-2" type="submit">Apply</i></button>
                                 </div>
+
+                                <div class="border-start border-secondary d-none d-sm-block" style="height: 20px;"></div>
+
+                                <div class="d-flex align-items-center px-2" style="max-width: 200px;">
+                                    <span class="text-muted small inter me-2 text-nowrap">Speed:</span>
+                                    <input type="range" class="form-range me-2" name="carousel_duration" id="durationSlider" style="width: fit-content"
+                                        min="0" max="3" step="0.05" value="<?php echo htmlspecialchars($current_duration); ?>" 
+                                        oninput="document.getElementById('durationVal').innerText = this.value + 's'" style="width: 90px; cursor: pointer;">
+                                    <span class="text-white small inter text-nowrap font-monospace" id="durationVal" style="min-width: 38px; text-align: left;"><?php echo $current_duration; ?>s</span>
+                                
+                                </div>
+
+                                <button class="btn btn-dark-green btn-sm rounded ms-1 px-2" style="width: stretch;" type="submit">Apply</button>
+
                             </form>
-                            <span class="badge bg-dark border border-secondary text-light px-3 py-2 inter" style="height: 38px; display: inline-flex; align-items: center;">Total Available: <?php echo count($active_slides); ?></span>
                         </div>
                     </div>
 
