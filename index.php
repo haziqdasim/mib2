@@ -12,7 +12,7 @@ $matches = [];
 if (file_exists($json_file)) {
     $json_data = file_get_contents($json_file);
     $match_data = json_decode($json_data, true);
-    if (isset($match_data['matches'])) {
+    if (isset($match_data['matches']) && is_array($match_data['matches'])) {
         $now = new DateTime('now', new DateTimeZone('Asia/Kuala_Lumpur'));
         $upcoming_matches = [];
         foreach ($match_data['matches'] as $match) {
@@ -248,6 +248,11 @@ if (file_exists($json_file)) {
                 
                 <div id="matches-container">
                     <?php
+                    // Defensive fallback initialization logic sequence
+                    if (!isset($matches) || !is_array($matches)) {
+                        $matches = [];
+                    }
+                    
                     $colors = ['dark-red', 'red', 'green', 'dark-green'];
                     foreach ($matches as $index => $match):
                         $color = $colors[$index % count($colors)];
@@ -294,8 +299,7 @@ if (file_exists($json_file)) {
 
             <div class="bottom-right-logo-cell" style="width: auto;">
                 <div class="d-flex bd-highlight mb-3" id="live-scores-container">
-                    <!-- Live score cards rendered by JavaScript -->
-                </div>
+                    </div>
             </div>
         </div>
 
@@ -306,23 +310,46 @@ if (file_exists($json_file)) {
         crossorigin="anonymous"></script>
         
     <script>
-        // Schedule page reload at 12:05 AM every day
-        function schedulePageReload() {
-            const now = new Date();
-            let target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 5, 0, 0);
-            
-            // If it's already past 12:05 AM today, schedule for 12:05 AM tomorrow
-            if (now >= target) {
-                target.setDate(target.getDate() + 1);
-            }
-            
-            const delay = target.getTime() - now.getTime();
-            console.log(`Page reload scheduled at 12:05 AM (in ${delay} ms)`);
-            setTimeout(() => {
-                window.location.reload();
-            }, delay);
+        // Schedule page reloads dynamically when an ongoing match hits the 2-hour mark
+        function scheduleMatchExpiryReload() {
+            fetch('fifa_world_cup_2026_malaysia_time.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.matches) return;
+                    
+                    const now = new Date();
+                    let closestTimeout = null;
+
+                    data.matches.forEach(match => {
+                        if (match.malaysia_time.includes('to') || match.malaysia_time.includes('Various')) return;
+                        
+                        const parts = match.malaysia_time.split(/[- :]/);
+                        if (parts.length < 5) return;
+                        
+                        const matchTime = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], 0, 0);
+                        const expiryTime = new Date(matchTime.getTime() + (2 * 60 * 60 * 1000));
+                        
+                        if (expiryTime > now) {
+                            const delay = expiryTime.getTime() - now.getTime();
+                            if (closestTimeout === null || delay < closestTimeout) {
+                                closestTimeout = delay;
+                            }
+                        }
+                    });
+
+                    if (closestTimeout !== null) {
+                        console.log(`Match lifecycle reload scheduled to trigger in ${Math.round(closestTimeout / 1000)} seconds.`);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, closestTimeout);
+                    } else {
+                        setTimeout(scheduleMatchExpiryReload, 900000);
+                    }
+                })
+                .catch(err => console.error('Failed to parse match schedule metadata:', err));
         }
-        schedulePageReload();
+        
+        scheduleMatchExpiryReload();
 
         setInterval(() => {
             fetch(window.location.href)
@@ -331,20 +358,16 @@ if (file_exists($json_file)) {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 
-                // Update carousel background
                 const newBg = doc.querySelector('.carousel-cell').style.backgroundImage;
                 document.querySelector('.carousel-cell').style.backgroundImage = newBg;
                 
-                // Update matches list dynamically
                 const newMatches = doc.querySelector('#matches-container');
                 const currentMatches = document.querySelector('#matches-container');
                 if (newMatches && currentMatches) {
                     currentMatches.innerHTML = newMatches.innerHTML;
                 }
             });
-        }, 3000); // Polls system updates safely every 3 seconds
-
-        // --- Live Score Ticker from worldcup26.ir API ---
+        }, 3000);
 
         function getStageLabel(game) {
             const typeMap = {
@@ -396,12 +419,14 @@ if (file_exists($json_file)) {
                 .then(response => response.json())
                 .then(data => {
                     const games = data.games || [];
+                    const finishedGames = games.filter(g => 
+                        g.time_elapsed === 'finished' || 
+                        g.finished === 'TRUE' || 
+                        g.finished === true
+                    );
 
-                    // Only show games that have started (in-progress OR finished).
-                    // 'notstarted' games are hidden entirely from the ticker.
-                    const selected = games
-                        .filter(g => g.time_elapsed && g.time_elapsed !== 'notstarted')
-                        .slice(0, 4);
+                    finishedGames.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+                    const selected = finishedGames.slice(0, 4);
 
                     const container = document.getElementById('live-scores-container');
                     if (container) {
@@ -411,7 +436,6 @@ if (file_exists($json_file)) {
                 .catch(err => console.error('Live score fetch failed:', err));
         }
 
-        // Fetch immediately on load, then every 30 seconds
         fetchLiveScores();
         setInterval(fetchLiveScores, 30000);
     </script>
