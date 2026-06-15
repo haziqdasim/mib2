@@ -2,9 +2,24 @@
 // Set timezone
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
-// Read the live configuration file written by the dashboard panel
+// Read configuration parameters
 $config_file = 'active_slide.txt';
+$interval_file = 'carousel_interval.txt';
+$upload_dir = 'assets/slide/';
+
 $live_image = file_exists($config_file) ? trim(file_get_contents($config_file)) : '10.png';
+$carousel_seconds = file_exists($interval_file) ? intval(trim(file_get_contents($interval_file))) : 5;
+
+// Collect all slides in directory to establish the javascript carousel collection map
+$all_slides = [];
+if (is_dir($upload_dir)) {
+    $scanned_slides = array_diff(scandir($upload_dir), array('.', '..'));
+    $all_slides = array_values($scanned_slides); // Clean array indices
+}
+// Fallback if directory is empty
+if (empty($all_slides)) {
+    $all_slides[] = $live_image;
+}
 
 // Load World Cup Matches
 $json_file = 'fifa_world_cup_2026_malaysia_time.json';
@@ -51,7 +66,6 @@ if (file_exists($json_file)) {
             font-style: normal;
         }
 
-        /* Registered your new Inter TTF font profile here */
         @font-face {
             font-family: 'Inter-Custom';
             src: url('/assets/fonts/Inter_18pt-Regular.ttf') format('truetype');
@@ -77,12 +91,10 @@ if (file_exists($json_file)) {
             font-family: 'FWC2026-NormalRegular', sans-serif;
         }
 
-        /* Explicitly forced the .inter class selection rule to render with the new local file font asset */
         .inter { 
             font-family: 'Inter-Custom', sans-serif !important; 
         }
 
-        /* Layout Framework Layout */
         .tv-container {
             height: 100vh;
             display: table;
@@ -95,7 +107,6 @@ if (file_exists($json_file)) {
             height: 88vh;
         }
 
-        /* Left Sidebar Panel using table-cell for clean TV layout */
         .sidebar-cell {
             display: table-cell;
             width: 16%;
@@ -113,14 +124,6 @@ if (file_exists($json_file)) {
             margin-bottom: 25px;
         }
 
-        .brand-logo-img {
-            max-width: 75px;
-            height: auto;
-            position: relative;
-            z-index: 2;
-        }
-        
-        /* Carousel Content Cell */
         .carousel-cell {
             display: table-cell;
             width: 84%;
@@ -132,11 +135,11 @@ if (file_exists($json_file)) {
             background-size: cover;
             background-repeat: no-repeat;
             box-shadow: 
-            inset 4px 4px 30px rgba(0, 0, 0, 0.2), 
-            inset -4px -4px 30px rgba(0, 0, 0, 0.2);
+            inset 4px 4px 30px rgba(0, 0, 0, 0.1), 
+            inset -4px -4px 30px rgba(0, 0, 0, 0.1);
+            transition: background-image 0.8s ease-in-out; /* Smooth slide change transitions */
         }
 
-        /* Bottom Live Score Ticker Layout */
         .ticker-row {
             display: table-row;
             height: 12vh;
@@ -169,62 +172,20 @@ if (file_exists($json_file)) {
             color: #ffffff;
         }
 
-        .ticker-items-wrapper {
-            flex-grow: 1;
-            display: flex;
-            gap: 15px;
-            overflow: hidden;
-        }
-
-        .ticker-card {
-            background-color: #ffffff;
-            color: #000000;
-            border-radius: 12px;
-            padding: 10px 18px;
-            min-width: 240px;
-            flex-shrink: 0;
-            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-        }
-        
         .livescore-card{
             background-color: white;
             border-radius: 5px 20px 5px;
         }
 
-        .ticker-team-text {
-            font-weight: 500;
-            font-size: 0.82rem;
-        }
-
-        .ticker-score-box {
-            font-weight: 700;
-            font-size: 1.05rem;
-            padding: 0 12px;
-            text-align: center;
-        }
-
-        .ticker-details-box {
-            border-left: 1px solid #dee2e6;
-            padding-left: 12px;
-            font-size: 0.68rem;
-            color: #6c757d;
-            line-height: 1.3;
-        }
-
         .bottom-right-logo-cell {
             display: table-cell;
-            width: 70px;
+            width: auto;
             vertical-align: middle;
             text-align: center;
             background-image: url(assets/bg-lowerbar.png);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
-        }
-
-        .mini-logo-img {
-            max-height: 48px;
-            width: auto;
         }
 
         .red{ background-color: #D40101; border-radius: 5px 20px 5px; }
@@ -239,9 +200,7 @@ if (file_exists($json_file)) {
 <body>
 
     <div class="tv-container">
-
         <div class="main-content-row">
-
             <div class="sidebar-cell">
                 <div class="sidebar-header-wrapper" style="padding-bottom: 20%">
                     <a href="dashboard.php">
@@ -253,16 +212,12 @@ if (file_exists($json_file)) {
                 
                 <div id="matches-container">
                     <?php
-                    // Defensive fallback initialization logic sequence
                     if (!isset($matches) || !is_array($matches)) {
                         $matches = [];
                     }
-                    
                     $colors = ['dark-red', 'red', 'green', 'dark-green'];
                     foreach ($matches as $index => $match):
                         $color = $colors[$index % count($colors)];
-                        
-                        // Format time
                         $time_str = $match['malaysia_time'];
                         $datetime = DateTime::createFromFormat('Y-m-d H:i', $time_str);
                         if ($datetime) {
@@ -289,9 +244,8 @@ if (file_exists($json_file)) {
                 </div>
             </div>
 
-            <div class="carousel-cell" style="background-image: url('assets/slide/<?php echo htmlspecialchars($live_image); ?>');">
+            <div class="carousel-cell" id="main-carousel-board" style="background-image: url('assets/slide/<?php echo htmlspecialchars($live_image); ?>');">
             </div>
-
         </div>
 
         <div class="ticker-row">
@@ -302,12 +256,11 @@ if (file_exists($json_file)) {
                 </div>
             </div>
 
-            <div class="bottom-right-logo-cell" style="width: auto;">
+            <div class="bottom-right-logo-cell">
                 <div class="d-flex bd-highlight mb-3" id="live-scores-container">
                     </div>
             </div>
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -315,19 +268,41 @@ if (file_exists($json_file)) {
         crossorigin="anonymous"></script>
         
     <script>
-        // Schedule page reloads dynamically when an ongoing match hits the 2-hour mark
+        // Inject server-side structural variables safely into the client tracking environment
+        let slideCollection = <?php echo json_encode($all_slides); ?>;
+        let currentIntervalDelay = <?php echo $carousel_seconds * 1000; ?>;
+        let activeImagePointer = "<?php echo htmlspecialchars($live_image); ?>";
+        
+        let currentSlideIndex = slideCollection.indexOf(activeImagePointer);
+        if (currentSlideIndex === -1) currentSlideIndex = 0;
+
+        let carouselIntervalTimer = null;
+
+        // Auto-run carousel rotation function
+        function startCarouselLoop() {
+            if (carouselIntervalTimer) clearInterval(carouselIntervalTimer);
+            if (slideCollection.length <= 1) return; // Do not loop if only 1 image exists
+
+            carouselIntervalTimer = setInterval(() => {
+                currentSlideIndex = (currentSlideIndex + 1) % slideCollection.length;
+                const nextImage = slideCollection[currentSlideIndex];
+                document.getElementById('main-carousel-board').style.backgroundImage = `url('assets/slide/${nextImage}')`;
+            }, currentIntervalDelay);
+        }
+
+        // Initialize Carousel execution tracking parameters
+        startCarouselLoop();
+
         function scheduleMatchExpiryReload() {
             fetch('fifa_world_cup_2026_malaysia_time.json')
                 .then(response => response.json())
                 .then(data => {
                     if (!data.matches) return;
-                    
                     const now = new Date();
                     let closestTimeout = null;
 
                     data.matches.forEach(match => {
                         if (match.malaysia_time.includes('to') || match.malaysia_time.includes('Various')) return;
-                        
                         const parts = match.malaysia_time.split(/[- :]/);
                         if (parts.length < 5) return;
                         
@@ -343,19 +318,16 @@ if (file_exists($json_file)) {
                     });
 
                     if (closestTimeout !== null) {
-                        console.log(`Match lifecycle reload scheduled to trigger in ${Math.round(closestTimeout / 1000)} seconds.`);
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, closestTimeout);
+                        setTimeout(() => { window.location.reload(); }, closestTimeout);
                     } else {
                         setTimeout(scheduleMatchExpiryReload, 900000);
                     }
                 })
                 .catch(err => console.error('Failed to parse match schedule metadata:', err));
         }
-        
         scheduleMatchExpiryReload();
 
+        // 3-second system state updates handler logic block
         setInterval(() => {
             fetch(window.location.href)
             .then(response => response.text())
@@ -363,8 +335,24 @@ if (file_exists($json_file)) {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 
-                const newBg = doc.querySelector('.carousel-cell').style.backgroundImage;
-                document.querySelector('.carousel-cell').style.backgroundImage = newBg;
+                // Read fresh inline JS arrays directly from data attributes or script extractions dynamically
+                // We parse the DOM variables to check if assets or interval parameters have changed in the backend
+                const scriptText = html;
+                const matchSlides = scriptText.match(/let slideCollection = (\[.*?\]);/);
+                const matchDelay = scriptText.match(/let currentIntervalDelay = ([0-9]+);/);
+
+                if (matchSlides && matchDelay) {
+                    const newSlides = JSON.parse(matchSlides[1]);
+                    const newDelay = parseInt(matchDelay[1]);
+
+                    // If dashboard configs have been updated, rebuild the carousel engine dynamically
+                    if (JSON.stringify(newSlides) !== JSON.stringify(slideCollection) || newDelay !== currentIntervalDelay) {
+                        slideCollection = newSlides;
+                        currentIntervalDelay = newDelay;
+                        currentSlideIndex = 0;
+                        startCarouselLoop();
+                    }
+                }
                 
                 const newMatches = doc.querySelector('#matches-container');
                 const currentMatches = document.querySelector('#matches-container');
@@ -403,7 +391,7 @@ if (file_exists($json_file)) {
                             </div>
                             <div class="py-1 px-3 flex-fill bd-highlight">
                                 <span class="text-dark inter fw-bold" id="home_score_${index}">${homeScore}</span>
-                                <span class="text-dark">-</span>
+                                <span class="text-dark">V</span>
                                 <span class="text-dark inter fw-bold" id="away_score_${index}">${awayScore}</span>
                             </div>
                             <div class="py-1 px-3 flex-fill bd-highlight">
