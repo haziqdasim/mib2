@@ -5,10 +5,12 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 // Read configuration parameters
 $config_file = 'active_slide.txt';
 $interval_file = 'carousel_interval.txt';
+$transition_file = 'carousel_transition.txt';
 $upload_dir = 'assets/slide/';
 
 $live_image = file_exists($config_file) ? trim(file_get_contents($config_file)) : '10.png';
 $carousel_seconds = file_exists($interval_file) ? intval(trim(file_get_contents($interval_file))) : 5;
+$carousel_animation = file_exists($transition_file) ? trim(file_get_contents($transition_file)) : 'dissolve';
 
 // Collect all slides in directory to establish the javascript carousel collection map
 $all_slides = [];
@@ -18,7 +20,7 @@ if (is_dir($upload_dir)) {
 }
 // Fallback if directory is empty
 if (empty($all_slides)) {
-    $all_slides[] = $live_image;
+    $all_slides[] = '10.png';
 }
 
 // Load World Cup Matches
@@ -127,19 +129,86 @@ if (file_exists($json_file)) {
         .carousel-cell {
             display: table-cell;
             width: 84%;
-            color: #1a1a1a;
             vertical-align: middle;
             text-align: center;
             position: relative;
+            background-color: #050505;
+            box-shadow: 
+            inset 4px 4px 30px rgba(0, 0, 0, 0.4), 
+            inset -4px -4px 30px rgba(0, 0, 0, 0.4);
+            perspective: 1200px;
+            overflow: hidden;
+        }
+
+        .slide-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
-            box-shadow: 
-            inset 4px 4px 30px rgba(0, 0, 0, 0.1), 
-            inset -4px -4px 30px rgba(0, 0, 0, 0.1);
-            transition: background-image 0.8s ease-in-out; /* Smooth slide change transitions */
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.85s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+        }
+        
+        .slide-layer.incoming {
+            z-index: 2;
         }
 
+        /* --- ADVANCED ENGINE CSS TRANSITIONS MAPPING RULES --- */
+
+        /* 1. Dissolve (Cross-fade) Animation */
+        .anim-dissolve .slide-layer.outgoing { opacity: 0; }
+        .anim-dissolve .slide-layer.incoming { opacity: 1; }
+
+        /* 2. Fade Animation (New Requirement) */
+        .anim-fade .slide-layer.outgoing { opacity: 0; transform: scale(1); }
+        .anim-fade .slide-layer.incoming { opacity: 1; transform: scale(1); }
+        .anim-fade .slide-layer.initial-hidden { opacity: 0; transform: scale(1); }
+
+        /* 3. Cube 3D Animation rotation matrices */
+        .anim-cube .slide-layer.outgoing {
+            transform: rotateY(-90deg) translateZ(50vw);
+            opacity: 0.3;
+        }
+        .anim-cube .slide-layer.incoming {
+            transform: rotateY(0deg) translateZ(0px);
+            opacity: 1;
+        }
+        .anim-cube .slide-layer.initial-hidden {
+            transform: rotateY(90deg) translateZ(50vw);
+            opacity: 0.3;
+        }
+
+        /* 4. Gallery Animation */
+        .anim-gallery .slide-layer.outgoing {
+            transform: scale(0.7) translateZ(-200px);
+            opacity: 0;
+        }
+        .anim-gallery .slide-layer.incoming {
+            transform: scale(1) translateZ(0px);
+            opacity: 1;
+        }
+        .anim-gallery .slide-layer.initial-hidden {
+            transform: scale(1.4) translateZ(200px);
+            opacity: 0;
+        }
+
+        /* 5. Slide from Left Animation */
+        .anim-slide-left .slide-layer.outgoing { transform: translateX(100%); }
+        .anim-slide-left .slide-layer.incoming { transform: translateX(0%); }
+        .anim-slide-left .slide-layer.initial-hidden { transform: translateX(-100%); }
+
+        /* 6. Slide from Right Animation */
+        .anim-slide-right .slide-layer.outgoing { transform: translateX(-100%); }
+        .anim-slide-right .slide-layer.incoming { transform: translateX(0%); }
+        .anim-slide-right .slide-layer.initial-hidden { transform: translateX(100%); }
+
+        /* --- TICKER SCORING RULES CONFIG --- */
         .ticker-row {
             display: table-row;
             height: 12vh;
@@ -244,7 +313,9 @@ if (file_exists($json_file)) {
                 </div>
             </div>
 
-            <div class="carousel-cell" id="main-carousel-board" style="background-image: url('assets/slide/<?php echo count($all_slides) > 0 ? htmlspecialchars($all_slides[0]) : '10.png'; ?>');">
+            <div class="carousel-cell" id="main-carousel-board">
+                <div class="slide-layer" id="layer-alpha"></div>
+                <div class="slide-layer" id="layer-beta"></div>
             </div>
         </div>
 
@@ -268,30 +339,63 @@ if (file_exists($json_file)) {
         crossorigin="anonymous"></script>
         
     <script>
-        // Inject server-side structural variables safely into the client tracking environment
         let slideCollection = <?php echo json_encode($all_slides); ?>;
         let currentIntervalDelay = <?php echo $carousel_seconds * 1000; ?>;
+        let activeTransitionFX = "<?php echo $carousel_animation; ?>";
         
         let currentSlideIndex = 0;
         let carouselIntervalTimer = null;
+        let currentActiveLayer = 'alpha';
 
-        // Auto-run carousel rotation function
         function startCarouselLoop() {
             if (carouselIntervalTimer) clearInterval(carouselIntervalTimer);
+            
+            const board = document.getElementById('main-carousel-board');
+            const layerAlpha = document.getElementById('layer-alpha');
+            const layerBeta = document.getElementById('layer-beta');
+
+            board.className = "carousel-cell anim-" + activeTransitionFX;
+
+            if (slideCollection.length === 0) slideCollection = ['10.png'];
+
             if (slideCollection.length <= 1) {
-                const fallbackImage = slideCollection[0] || '10.png';
-                document.getElementById('main-carousel-board').style.backgroundImage = `url('assets/slide/${fallbackImage}')`;
+                layerAlpha.style.backgroundImage = `url('assets/slide/${slideCollection[0]}')`;
+                layerAlpha.className = "slide-layer incoming";
+                layerBeta.className = "slide-layer d-none";
                 return; 
             }
 
+            layerAlpha.style.backgroundImage = `url('assets/slide/${slideCollection[currentSlideIndex]}')`;
+            layerAlpha.className = "slide-layer incoming";
+            layerBeta.className = "slide-layer initial-hidden";
+
             carouselIntervalTimer = setInterval(() => {
                 currentSlideIndex = (currentSlideIndex + 1) % slideCollection.length;
-                const nextImage = slideCollection[currentSlideIndex];
-                document.getElementById('main-carousel-board').style.backgroundImage = `url('assets/slide/${nextImage}')`;
+                const nextImageFile = slideCollection[currentSlideIndex];
+
+                if (currentActiveLayer === 'alpha') {
+                    layerBeta.style.backgroundImage = `url('assets/slide/${nextImageFile}')`;
+                    layerAlpha.className = "slide-layer outgoing";
+                    layerBeta.className = "slide-layer incoming";
+                    currentActiveLayer = 'beta';
+                } else {
+                    layerAlpha.style.backgroundImage = `url('assets/slide/${nextImageFile}')`;
+                    layerBeta.className = "slide-layer outgoing";
+                    layerAlpha.className = "slide-layer incoming";
+                    currentActiveLayer = 'alpha';
+                }
+
+                setTimeout(() => {
+                    if (currentActiveLayer === 'beta') {
+                        layerAlpha.className = "slide-layer initial-hidden";
+                    } else {
+                        layerBeta.className = "slide-layer initial-hidden";
+                    }
+                }, 850);
+                
             }, currentIntervalDelay);
         }
 
-        // Initialize Carousel execution tracking parameters
         startCarouselLoop();
 
         function scheduleMatchExpiryReload() {
@@ -328,7 +432,6 @@ if (file_exists($json_file)) {
         }
         scheduleMatchExpiryReload();
 
-        // 3-second system state updates handler logic block
         setInterval(() => {
             fetch(window.location.href)
             .then(response => response.text())
@@ -336,20 +439,25 @@ if (file_exists($json_file)) {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 
-                // Read fresh inline JS arrays directly from data attributes or script extractions dynamically
                 const scriptText = html;
                 const matchSlides = scriptText.match(/let slideCollection = (\[.*?\]);/);
                 const matchDelay = scriptText.match(/let currentIntervalDelay = ([0-9]+);/);
+                const matchFX = scriptText.match(/let activeTransitionFX = "(.*?)";/);
 
-                if (matchSlides && matchDelay) {
+                if (matchSlides && matchDelay && matchFX) {
                     const newSlides = JSON.parse(matchSlides[1]);
                     const newDelay = parseInt(matchDelay[1]);
+                    const newFX = matchFX[1];
 
-                    // If dashboard configs have been updated, rebuild the carousel engine dynamically
-                    if (JSON.stringify(newSlides) !== JSON.stringify(slideCollection) || newDelay !== currentIntervalDelay) {
+                    if (JSON.stringify(newSlides) !== JSON.stringify(slideCollection) || 
+                        newDelay !== currentIntervalDelay || 
+                        newFX !== activeTransitionFX) {
+                        
                         slideCollection = newSlides;
                         currentIntervalDelay = newDelay;
+                        activeTransitionFX = newFX;
                         currentSlideIndex = 0;
+                        currentActiveLayer = 'alpha';
                         startCarouselLoop();
                     }
                 }
