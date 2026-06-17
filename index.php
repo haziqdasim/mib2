@@ -497,9 +497,11 @@ if (file_exists($json_file)) {
             });
         }, 3000);
 
+
+        // start
         function getStageLabel(game) {
             const typeMap = {
-                'group': 'Group ' + game.group,
+                'group': 'Group ' + (game.group || ''),
                 'r32':   'Round of 32',
                 'r16':   'Round of 16',
                 'qf':    'Quarter-Final',
@@ -513,30 +515,30 @@ if (file_exists($json_file)) {
         function buildScoreCard(game, index) {
             const homeTeam = game.home_team_name_en || game.home_team_label || '?';
             const awayTeam = game.away_team_name_en || game.away_team_label || '?';
-            const homeScore = game.home_score !== undefined ? game.home_score : '-';
-            const awayScore = game.away_score !== undefined ? game.away_score : '-';
+            const homeScore = game.home_score !== undefined && game.home_score !== null ? game.home_score : '-';
+            const awayScore = game.away_score !== undefined && game.away_score !== null ? game.away_score : '-';
             const stage = getStageLabel(game);
 
+            // Using row g-0 and d-inline-block adjustments to force horizontal left-to-right 
+            // alignment inline without touching your core style sheets.
             return `
-                <div class="p-2 bd-highlight">
-                    <div class="livescore-card">
-                        <div class="d-flex bd-highlight">
-                            <div class="py-1 px-3 flex-fill bd-highlight">
-                                <span class="text-dark inter" id="home_team_name_en_${index}">${homeTeam}</span>
+                <div class="p-2 bd-highlight d-inline-block text-start" style="min-width: 240px; max-width: 280px;">
+                    <div class="livescore-card shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center px-3 py-1">
+                            <div class="text-truncate flex-grow-1" style="max-width: 80px;">
+                                <span class="text-dark inter" id="home_team_name_en_${index}" title="${homeTeam}">${homeTeam}</span>
                             </div>
-                            <div class="py-1 px-3 flex-fill bd-highlight">
+                            <div class="px-2 text-center no-wrap">
                                 <span class="text-dark inter fw-bold" id="home_score_${index}">${homeScore}</span>
-                                <span class="text-dark">V</span>
+                                <span class="text-muted mx-1" style="font-size: 0.8rem;">-</span>
                                 <span class="text-dark inter fw-bold" id="away_score_${index}">${awayScore}</span>
                             </div>
-                            <div class="py-1 px-3 flex-fill bd-highlight">
-                                <span class="text-dark inter" id="away_team_name_en_${index}">${awayTeam}</span>
+                            <div class="text-truncate text-end flex-grow-1" style="max-width: 80px;">
+                                <span class="text-dark inter" id="away_team_name_en_${index}" title="${awayTeam}">${awayTeam}</span>
                             </div>
                         </div>
-                        <div class="d-flex bd-highlight">
-                            <div class="py-1 px-3 flex-fill bd-highlight">
-                                <span class="text-dark inter" id="stage_${index}"><b>${stage}</b></span>
-                            </div>
+                        <div class="bg-light border-top text-center py-1" style="border-radius: 0 0 5px 20px;">
+                            <span class="text-muted inter small" id="stage_${index}"><b>${stage}</b></span>
                         </div>
                     </div>
                 </div>`;
@@ -544,24 +546,57 @@ if (file_exists($json_file)) {
 
         function fetchLiveScores() {
             fetch('proxy.php')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response bad gateway');
+                    return response.json();
+                })
                 .then(data => {
                     const games = data.games || [];
+                    
+                    // 1. Filter explicitly by time_elapsed === 'finished'
                     const finishedGames = games.filter(g => 
-                        g.time_elapsed === 'finished' || 
-                        g.finished === 'TRUE' || 
-                        g.finished === true
+                        g && 
+                        (String(g.time_elapsed).toLowerCase() === 'finished' || 
+                         g.finished === 'TRUE' || 
+                         g.finished === true)
                     );
 
-                    finishedGames.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+                    // 2. Sort safely to get the LATEST matches first. 
+                    // If API provides an ID, highest ID means latest match. Fallback to indexing order if identical.
+                    finishedGames.sort((a, b) => {
+                        const idA = a.id ? parseInt(a.id) : 0;
+                        const idB = b.id ? parseInt(b.id) : 0;
+                        return idB - idA;
+                    });
+
+                    // 3. Extract the top 4 latest finished items
                     const selected = finishedGames.slice(0, 4);
 
                     const container = document.getElementById('live-scores-container');
                     if (container) {
-                        container.innerHTML = selected.map((game, i) => buildScoreCard(game, i)).join('');
+                        // Forces horizontal left-to-right flow behavior natively on the element wrapper
+                        container.style.display = 'flex';
+                        container.style.flexDirection = 'row';
+                        container.style.flexWrap = 'nowrap';
+                        container.style.alignItems = 'center';
+                        container.style.justifyContent = 'flex-start';
+                        container.style.width = '100%';
+                        
+                        if (selected.length > 0) {
+                            container.innerHTML = selected.map((game, i) => buildScoreCard(game, i)).join('');
+                        } else {
+                            container.innerHTML = '<div class="p-2 text-white-50 inter small">No finished matches available today</div>';
+                        }
                     }
                 })
-                .catch(err => console.error('Live score fetch failed:', err));
+                .catch(err => {
+                    console.error('Live score fetch failed:', err);
+                    const container = document.getElementById('live-scores-container');
+                    // Fail gracefully without crashing the TV board UI layout
+                    if (container && !container.innerHTML.trim()) {
+                        container.innerHTML = '<div class="p-2 text-white-50 inter small">Scores temporarily unavailable</div>';
+                    }
+                });
         }
 
         fetchLiveScores();
