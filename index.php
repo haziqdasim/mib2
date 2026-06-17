@@ -115,11 +115,11 @@ if (file_exists($json_file)) {
             display: table-cell;
             width: 16%;
             vertical-align: top;
-            padding: 20px 15px;
-            background-image: url(assets/bg-sidebar.png);
+            /* padding: 20px 15px; */
+            /* background-image: url(assets/bg-sidebar.png);
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
+            background-repeat: no-repeat; */
         }
 
         .sidebar-header-wrapper {
@@ -274,46 +274,54 @@ if (file_exists($json_file)) {
     <div class="tv-container">
         <div class="main-content-row">
             <div class="sidebar-cell">
-                <div class="sidebar-header-wrapper" style="padding-bottom: 20%">
+                <div class="sidebar-header-wrapper">
                     <a href="dashboard.php">
-                        <img src="/assets/logo-white.png" class="img-fluid" style="width:30%" alt="logo">
+                        <img src="assets/logo-white.gif" alt="animated fifa logo" width="300" height="250">
+                        <!-- <img src="/assets/logo-white.gif" class="img-fluid" style="width:30%" alt="logo"> -->
                     </a>
                 </div>
 
-                <h5 class="text-white mt-5">World Cup Matches</h5>
+                <div style="padding: 0px 20px 0px 20px;">
+                    <h5 class="text-white mt-5">World Cup Matches</h5>
                 
-                <div id="matches-container">
-                    <?php
-                    if (!isset($matches) || !is_array($matches)) {
-                        $matches = [];
-                    }
-                    $colors = ['dark-red', 'red', 'green', 'dark-green'];
-                    foreach ($matches as $index => $match):
-                        $color = $colors[$index % count($colors)];
-                        $time_str = $match['malaysia_time'];
-                        $datetime = DateTime::createFromFormat('Y-m-d H:i', $time_str);
-                        if ($datetime) {
-                            $formatted_time = $datetime->format('D, j M') . '<br>' . $datetime->format('g:ia');
-                        } else {
-                            $formatted_time = htmlspecialchars($time_str);
+                    <div id="matches-container">
+                        <?php
+                        if (!isset($matches) || !is_array($matches)) {
+                            $matches = [];
                         }
-                    ?>
-                    <div class="card mb-3" style="border-radius: 5px 20px 5px;">
-                        <div class="card-header text-white inter fw-bold <?php echo $color; ?>" id="stage"><?php echo htmlspecialchars($match['stage']); ?></div>
-                        <div class="card-body text-dark">
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <span class="inter" id="home_team"><?php echo htmlspecialchars($match['home_team']); ?></span><br>
-                                    <span class="inter" id="away_team"><?php echo htmlspecialchars($match['away_team']); ?></span>
-                                </div>
-                                <div class="col-md-5">
-                                    <span class="inter" id="malaysia_time"><?php echo $formatted_time; ?></span>
+                        $colors = ['dark-red', 'red', 'green', 'dark-green'];
+                        foreach ($matches as $index => $match):
+                            $color = $colors[$index % count($colors)];
+                            $time_str = $match['malaysia_time'];
+                            $datetime = DateTime::createFromFormat('Y-m-d H:i', $time_str);
+                            if ($datetime) {
+                                // $formatted_time = $datetime->format('D, j M') . '<br>' . $datetime->format('g:ia');
+                                $formatted_time = $datetime->format('j M,') . '<br>' . $datetime->format('g:ia');
+                            } else {
+                                $formatted_time = htmlspecialchars($time_str);
+                            }
+                        ?>
+                        <div class="card mb-3" style="border-radius: 5px 20px 5px;">
+                            <div class="card-header text-white inter fw-bold <?php echo $color; ?>" id="stage"><?php echo htmlspecialchars($match['stage']); ?></div>
+                            <div class="card-body text-dark">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <span class="inter" id="home_team"><?php echo htmlspecialchars($match['home_team']); ?></span><br>
+                                        <span class="inter" id="away_team"><?php echo htmlspecialchars($match['away_team']); ?></span>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <span class="inter" id="malaysia_time"><?php echo $formatted_time; ?></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
                 </div>
+
+                
+
+
             </div>
 
             <div class="carousel-cell" id="main-carousel-board">
@@ -326,7 +334,7 @@ if (file_exists($json_file)) {
             <div class="ticker-container-cell">
                 <div class="ticker-flex-layout">
                     <div></div>
-                    <div class="d-flex justify-content-end ticker-label">Live Score :</div>
+                    <div class="d-flex justify-content-end ticker-label">Scores :</div>
                 </div>
             </div>
 
