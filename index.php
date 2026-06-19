@@ -25,6 +25,31 @@ if (empty($all_slides)) {
     $all_slides[] = '10.png';
 }
 
+// --- NEW FLAG METADATA FETCHING LAYER ---
+$teams_map = [];
+$teams_url = 'https://worldcup26.ir/get/teams';
+$ch_teams = curl_init();
+curl_setopt($ch_teams, CURLOPT_URL, $teams_url);
+curl_setopt($ch_teams, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch_teams, CURLOPT_TIMEOUT, 5);
+curl_setopt($ch_teams, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch_teams, CURLOPT_SSL_VERIFYHOST, false);
+$teams_response = curl_exec($ch_teams);
+curl_close($ch_teams);
+
+if ($teams_response) {
+    $teams_data = json_decode($teams_response, true);
+    // Build an associative lookup map: ["English Name" => "Flag URL"]
+    if (isset($teams_data['teams']) && is_array($teams_data['teams'])) {
+        foreach ($teams_data['teams'] as $team) {
+            if (isset($team['name_en']) && isset($team['flag'])) {
+                $teams_map[trim($team['name_en'])] = $team['flag'];
+            }
+        }
+    }
+}
+// ----------------------------------------
+
 // Load World Cup Matches
 $json_file = 'fifa_world_cup_2026_malaysia_time.json';
 $matches = [];
@@ -77,11 +102,14 @@ if (file_exists($json_file)) {
             font-style: normal;
         }
 
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
         }
-        
-        body, html {
+
+        body,
+        html {
             margin: 0;
             padding: 0;
             height: 100%;
@@ -91,12 +119,20 @@ if (file_exists($json_file)) {
             font-family: 'FWC2026-NormalRegular', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
-        h1, h2, h3, h4, h5, h6, span, div, p {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        div,
+        p {
             font-family: 'FWC2026-NormalRegular', sans-serif;
         }
 
-        .inter { 
-            font-family: 'Inter-Custom', sans-serif !important; 
+        .inter {
+            font-family: 'Inter-Custom', sans-serif !important;
         }
 
         .tv-container {
@@ -115,11 +151,6 @@ if (file_exists($json_file)) {
             display: table-cell;
             width: 16%;
             vertical-align: top;
-            /* padding: 20px 15px; */
-            /* background-image: url(assets/bg-sidebar.png);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat; */
         }
 
         .sidebar-header-wrapper {
@@ -135,9 +166,9 @@ if (file_exists($json_file)) {
             text-align: center;
             position: relative;
             background-color: #050505;
-            box-shadow: 
-            inset 4px 4px 30px rgba(0, 0, 0, 0.4), 
-            inset -4px -4px 30px rgba(0, 0, 0, 0.4);
+            box-shadow:
+                inset 4px 4px 30px rgba(0, 0, 0, 0.4),
+                inset -4px -4px 30px rgba(0, 0, 0, 0.4);
             perspective: 1200px;
             overflow: hidden;
         }
@@ -153,65 +184,92 @@ if (file_exists($json_file)) {
             background-repeat: no-repeat;
             backface-visibility: hidden;
             transform-style: preserve-3d;
-            /* Transition speed is now controlled dynamically in Javascript inline style hooks */
             transition: all 0.85s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 1;
         }
-        
+
         .slide-layer.incoming {
             z-index: 2;
         }
 
         /* --- ADVANCED ENGINE CSS TRANSITIONS MAPPING RULES --- */
+        .anim-dissolve .slide-layer.outgoing {
+            opacity: 0;
+        }
 
-        /* 1. Dissolve (Cross-fade) Animation */
-        .anim-dissolve .slide-layer.outgoing { opacity: 0; }
-        .anim-dissolve .slide-layer.incoming { opacity: 1; }
+        .anim-dissolve .slide-layer.incoming {
+            opacity: 1;
+        }
 
-        /* 2. Fade Animation */
-        .anim-fade .slide-layer.outgoing { opacity: 0; transform: scale(1); }
-        .anim-fade .slide-layer.incoming { opacity: 1; transform: scale(1); }
-        .anim-fade .slide-layer.initial-hidden { opacity: 0; transform: scale(1); }
+        .anim-fade .slide-layer.outgoing {
+            opacity: 0;
+            transform: scale(1);
+        }
 
-        /* 3. Cube 3D Animation rotation matrices */
+        .anim-fade .slide-layer.incoming {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .anim-fade .slide-layer.initial-hidden {
+            opacity: 0;
+            transform: scale(1);
+        }
+
         .anim-cube .slide-layer.outgoing {
             transform: rotateY(-90deg) translateZ(50vw);
             opacity: 0.3;
         }
+
         .anim-cube .slide-layer.incoming {
             transform: rotateY(0deg) translateZ(0px);
             opacity: 1;
         }
+
         .anim-cube .slide-layer.initial-hidden {
             transform: rotateY(90deg) translateZ(50vw);
             opacity: 0.3;
         }
 
-        /* 4. Gallery Animation */
         .anim-gallery .slide-layer.outgoing {
             transform: scale(0.7) translateZ(-200px);
             opacity: 0;
         }
+
         .anim-gallery .slide-layer.incoming {
             transform: scale(1) translateZ(0px);
             opacity: 1;
         }
+
         .anim-gallery .slide-layer.initial-hidden {
             transform: scale(1.4) translateZ(200px);
             opacity: 0;
         }
 
-        /* 5. Slide from Left Animation */
-        .anim-slide-left .slide-layer.outgoing { transform: translateX(100%); }
-        .anim-slide-left .slide-layer.incoming { transform: translateX(0%); }
-        .anim-slide-left .slide-layer.initial-hidden { transform: translateX(-100%); }
+        .anim-slide-left .slide-layer.outgoing {
+            transform: translateX(100%);
+        }
 
-        /* 6. Slide from Right Animation */
-        .anim-slide-right .slide-layer.outgoing { transform: translateX(-100%); }
-        .anim-slide-right .slide-layer.incoming { transform: translateX(0%); }
-        .anim-slide-right .slide-layer.initial-hidden { transform: translateX(100%); }
+        .anim-slide-left .slide-layer.incoming {
+            transform: translateX(0%);
+        }
 
-        /* --- TICKER SCORING RULES CONFIG --- */
+        .anim-slide-left .slide-layer.initial-hidden {
+            transform: translateX(-100%);
+        }
+
+        .anim-slide-right .slide-layer.outgoing {
+            transform: translateX(-100%);
+        }
+
+        .anim-slide-right .slide-layer.incoming {
+            transform: translateX(0%);
+        }
+
+        .anim-slide-right .slide-layer.initial-hidden {
+            transform: translateX(100%);
+        }
+
         .ticker-row {
             display: table-row;
             height: 12vh;
@@ -244,7 +302,7 @@ if (file_exists($json_file)) {
             color: #ffffff;
         }
 
-        .livescore-card{
+        .livescore-card {
             background-color: white;
             border-radius: 5px 20px 5px;
         }
@@ -260,12 +318,42 @@ if (file_exists($json_file)) {
             background-position: center;
         }
 
-        .red{ background-color: #D40101; border-radius: 5px 20px 5px; }
-        .dark-red{ background-color: #731311; border-radius: 5px 20px 5px; }
-        .green{ background-color: #00C953; border-radius: 5px 20px 5px; }
-        .dark-green{ background-color: #004E3C; border-radius: 5px 20px 5px; }
-        .card{ border: none; }
-        .card-header:first-child{ border-radius: 5px 19px 0 0; }
+        .red {
+            background-color: #D40101;
+            border-radius: 5px 20px 5px;
+        }
+
+        .dark-red {
+            background-color: #731311;
+            border-radius: 5px 20px 5px;
+        }
+
+        .green {
+            background-color: #00C953;
+            border-radius: 5px 20px 5px;
+        }
+
+        .dark-green {
+            background-color: #004E3C;
+            border-radius: 5px 20px 5px;
+        }
+
+        .card {
+            border: none;
+        }
+
+        .card-header:first-child {
+            border-radius: 5px 19px 0 0;
+        }
+
+        /* Inline structural styling fix for flags layout */
+        .flag-icon-img {
+            width: 24px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            margin-bottom: 2px;
+        }
     </style>
 </head>
 
@@ -277,13 +365,12 @@ if (file_exists($json_file)) {
                 <div class="sidebar-header-wrapper">
                     <a href="dashboard.php">
                         <img src="assets/logo-white.gif" alt="animated fifa logo" width="300" height="250">
-                        <!-- <img src="/assets/logo-white.gif" class="img-fluid" style="width:30%" alt="logo"> -->
                     </a>
                 </div>
 
                 <div style="padding: 0px 20px 0px 20px;">
                     <h5 class="text-white mt-5">World Cup Matches</h5>
-                
+
                     <div id="matches-container">
                         <?php
                         if (!isset($matches) || !is_array($matches)) {
@@ -295,33 +382,50 @@ if (file_exists($json_file)) {
                             $time_str = $match['malaysia_time'];
                             $datetime = DateTime::createFromFormat('Y-m-d H:i', $time_str);
                             if ($datetime) {
-                                // $formatted_time = $datetime->format('D, j M') . '<br>' . $datetime->format('g:ia');
                                 $formatted_time = $datetime->format('j M,') . '<br>' . $datetime->format('g:ia');
                             } else {
                                 $formatted_time = htmlspecialchars($time_str);
                             }
-                        ?>
-                        <div class="card mb-3" style="border-radius: 5px 20px 5px;">
-                            <div class="card-header text-white inter fw-bold <?php echo $color; ?>" id="stage"><?php echo htmlspecialchars($match['stage']); ?></div>
-                            <div class="card-body text-dark">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <span class="inter" id="home_team"><?php echo htmlspecialchars($match['home_team']); ?></span><br>
-                                        <span class="inter" id="away_team"><?php echo htmlspecialchars($match['away_team']); ?></span>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <span class="inter" id="malaysia_time"><?php echo $formatted_time; ?></span>
+
+                            // Match teams up against the fetched flag configuration array map
+                            $home_team_name = trim($match['home_team']);
+                            $away_team_name = trim($match['away_team']);
+                            $home_flag_url = isset($teams_map[$home_team_name]) ? $teams_map[$home_team_name] : '';
+                            $away_flag_url = isset($teams_map[$away_team_name]) ? $teams_map[$away_team_name] : '';
+                            ?>
+                            <div class="card mb-3" style="border-radius: 5px 20px 5px;">
+                                <div class="card-header text-white inter fw-bold <?php echo $color; ?>" id="stage">
+                                    <?php echo htmlspecialchars($match['stage']); ?></div>
+                                <div class="card-body text-dark">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-7">
+                                            <span class="inter" id="home_flag" style="font-size: 12px;">
+                                                <?php if ($home_flag_url): ?>
+                                                    <img src="<?php echo htmlspecialchars($home_flag_url); ?>" class="flag-icon-img" alt="flag">
+                                                <?php endif; ?>
+                                            </span>
+                                            <span class="inter"
+                                                id="home_team"><?php echo htmlspecialchars($match['home_team']); ?></span><br>
+
+                                            <span class="inter" id="away_flag"
+                                                style="font-size: 12px;">
+                                                <?php if ($away_flag_url): ?>
+                                                    <img src="<?php echo htmlspecialchars($away_flag_url); ?>" class="flag-icon-img" alt="flag">
+                                                <?php endif; ?>
+                                            </span>
+                                            <span class="inter"
+                                                id="away_team"><?php echo htmlspecialchars($match['away_team']); ?></span>
+                                        </div>
+                                        <div class="col-md-5 text-end">
+                                            <span class="inter" id="malaysia_time"
+                                                style="font-size: 0.85rem; font-weight: bold; color: #555;"><?php echo $formatted_time; ?></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
-
-                
-
-
             </div>
 
             <div class="carousel-cell" id="main-carousel-board">
@@ -348,13 +452,13 @@ if (file_exists($json_file)) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-        
+
     <script>
         let slideCollection = <?php echo json_encode($all_slides); ?>;
         let currentIntervalDelay = <?php echo $carousel_seconds * 1000; ?>;
         let activeTransitionFX = "<?php echo $carousel_animation; ?>";
-        let activeTransitionSpeed = <?php echo $carousel_speed; ?>; // Dynamic duration value initialized
-        
+        let activeTransitionSpeed = <?php echo $carousel_speed; ?>;
+
         let currentSlideIndex = 0;
         let carouselIntervalTimer = null;
         let currentActiveLayer = 'alpha';
@@ -363,14 +467,14 @@ if (file_exists($json_file)) {
             const layerAlpha = document.getElementById('layer-alpha');
             const layerBeta = document.getElementById('layer-beta');
             const durationStyleValue = `all ${activeTransitionSpeed}s cubic-bezier(0.25, 1, 0.5, 1)`;
-            
+
             if (layerAlpha) layerAlpha.style.transition = durationStyleValue;
             if (layerBeta) layerBeta.style.transition = durationStyleValue;
         }
 
         function startCarouselLoop() {
             if (carouselIntervalTimer) clearInterval(carouselIntervalTimer);
-            
+
             const board = document.getElementById('main-carousel-board');
             const layerAlpha = document.getElementById('layer-alpha');
             const layerBeta = document.getElementById('layer-beta');
@@ -384,7 +488,7 @@ if (file_exists($json_file)) {
                 layerAlpha.style.backgroundImage = `url('assets/slide/${slideCollection[0]}')`;
                 layerAlpha.className = "slide-layer incoming";
                 layerBeta.className = "slide-layer d-none";
-                return; 
+                return;
             }
 
             layerAlpha.style.backgroundImage = `url('assets/slide/${slideCollection[currentSlideIndex]}')`;
@@ -413,8 +517,8 @@ if (file_exists($json_file)) {
                     } else {
                         layerBeta.className = "slide-layer initial-hidden";
                     }
-                }, (activeTransitionSpeed * 1000)); // Dynamic timeout map sync
-                
+                }, (activeTransitionSpeed * 1000));
+
             }, currentIntervalDelay);
         }
 
@@ -432,10 +536,10 @@ if (file_exists($json_file)) {
                         if (match.malaysia_time.includes('to') || match.malaysia_time.includes('Various')) return;
                         const parts = match.malaysia_time.split(/[- :]/);
                         if (parts.length < 5) return;
-                        
+
                         const matchTime = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], 0, 0);
                         const expiryTime = new Date(matchTime.getTime() + (2 * 60 * 60 * 1000));
-                        
+
                         if (expiryTime > now) {
                             const delay = expiryTime.getTime() - now.getTime();
                             if (closestTimeout === null || delay < closestTimeout) {
@@ -454,58 +558,86 @@ if (file_exists($json_file)) {
         }
         scheduleMatchExpiryReload();
 
-        // 3-Second Self Polling Configurations Sync Layer
+        // 3-Second Self Polling Configurations Sync Layer (Blink-Free Patch)
         setInterval(() => {
             fetch(window.location.href)
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                const scriptText = html;
-                const matchSlides = scriptText.match(/let slideCollection = (\[.*?\]);/);
-                const matchDelay = scriptText.match(/let currentIntervalDelay = ([0-9]+);/);
-                const matchFX = scriptText.match(/let activeTransitionFX = "(.*?)";/);
-                const matchSpeed = scriptText.match(/let activeTransitionSpeed = ([0-9.]+);/); // Polling parser addition
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
 
-                if (matchSlides && matchDelay && matchFX && matchSpeed) {
-                    const newSlides = JSON.parse(matchSlides[1]);
-                    const newDelay = parseInt(matchDelay[1]);
-                    const newFX = matchFX[1];
-                    const newSpeed = parseFloat(matchSpeed[1]);
+                    const scriptText = html;
+                    const matchSlides = scriptText.match(/let slideCollection = (\[.*?\]);/);
+                    const matchDelay = scriptText.match(/let currentIntervalDelay = ([0-9]+);/);
+                    const matchFX = scriptText.match(/let activeTransitionFX = "(.*?)";/);
+                    const matchSpeed = scriptText.match(/let activeTransitionSpeed = ([0-9.]+);/);
 
-                    if (JSON.stringify(newSlides) !== JSON.stringify(slideCollection) || 
-                        newDelay !== currentIntervalDelay || 
-                        newFX !== activeTransitionFX ||
-                        newSpeed !== activeTransitionSpeed) {
-                        
-                        slideCollection = newSlides;
-                        currentIntervalDelay = newDelay;
-                        activeTransitionFX = newFX;
-                        activeTransitionSpeed = newSpeed;
-                        currentSlideIndex = 0;
-                        currentActiveLayer = 'alpha';
-                        startCarouselLoop();
+                    if (matchSlides && matchDelay && matchFX && matchSpeed) {
+                        const newSlides = JSON.parse(matchSlides[1]);
+                        const newDelay = parseInt(matchDelay[1]);
+                        const newFX = matchFX[1];
+                        const newSpeed = parseFloat(matchSpeed[1]);
+
+                        if (JSON.stringify(newSlides) !== JSON.stringify(slideCollection) ||
+                            newDelay !== currentIntervalDelay ||
+                            newFX !== activeTransitionFX ||
+                            newSpeed !== activeTransitionSpeed) {
+
+                            slideCollection = newSlides;
+                            currentIntervalDelay = newDelay;
+                            activeTransitionFX = newFX;
+                            activeTransitionSpeed = newSpeed;
+                            currentSlideIndex = 0;
+                            currentActiveLayer = 'alpha';
+                            startCarouselLoop();
+                        }
                     }
-                }
-                
-                const newMatches = doc.querySelector('#matches-container');
-                const currentMatches = document.querySelector('#matches-container');
-                if (newMatches && currentMatches) {
-                    currentMatches.innerHTML = newMatches.innerHTML;
-                }
-            });
+
+                    // --- SMART UPDATE PATCH FOR THE SIDEBAR MATCHES ---
+                    const newMatchesContainer = doc.querySelector('#matches-container');
+                    const currentMatchesContainer = document.querySelector('#matches-container');
+
+                    if (newMatchesContainer && currentMatchesContainer) {
+                        const newCards = newMatchesContainer.querySelectorAll('.card');
+                        const currentCards = currentMatchesContainer.querySelectorAll('.card');
+
+                        // If the number of matches changed, swap out everything safely
+                        if (newCards.length !== currentCards.length) {
+                            currentMatchesContainer.innerHTML = newMatchesContainer.innerHTML;
+                        } else {
+                            // Loop through each match card individually to update selectively
+                            newCards.forEach((newCard, i) => {
+                                const currentCard = currentCards[i];
+
+                                const newHome = newCard.querySelector('#home_team')?.textContent;
+                                const currentHome = currentCard.querySelector('#home_team')?.textContent;
+                                const newAway = newCard.querySelector('#away_team')?.textContent;
+                                const currentAway = currentCard.querySelector('#away_team')?.textContent;
+
+                                // Only update this specific card if the teams changed or structural time updated
+                                if (newHome !== currentHome || newAway !== currentAway) {
+                                    currentCard.innerHTML = newCard.innerHTML;
+                                } else {
+                                    // If teams are identical, just refresh the time element to ensure accuracy
+                                    const newTime = newCard.querySelector('#malaysia_time');
+                                    const currentTime = currentCard.querySelector('#malaysia_time');
+                                    if (newTime && currentTime && currentTime.innerHTML !== newTime.innerHTML) {
+                                        currentTime.innerHTML = newTime.innerHTML;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
         }, 3000);
 
-
-        // start
         function getStageLabel(game) {
             const typeMap = {
                 'group': 'Group ' + (game.group || ''),
-                'r32':   'Round of 32',
-                'r16':   'Round of 16',
-                'qf':    'Quarter-Final',
-                'sf':    'Semi-Final',
+                'r32': 'Round of 32',
+                'r16': 'Round of 16',
+                'qf': 'Quarter-Final',
+                'sf': 'Semi-Final',
                 'third': '3rd Place',
                 'final': 'Final'
             };
@@ -519,8 +651,6 @@ if (file_exists($json_file)) {
             const awayScore = game.away_score !== undefined && game.away_score !== null ? game.away_score : '-';
             const stage = getStageLabel(game);
 
-            // Using row g-0 and d-inline-block adjustments to force horizontal left-to-right 
-            // alignment inline without touching your core style sheets.
             return `
                 <div class="p-2 bd-highlight d-inline-block text-start" style="min-width: 240px; max-width: 280px;">
                     <div class="livescore-card shadow-sm">
@@ -552,36 +682,31 @@ if (file_exists($json_file)) {
                 })
                 .then(data => {
                     const games = data.games || [];
-                    
-                    // 1. Filter explicitly by time_elapsed === 'finished'
-                    const finishedGames = games.filter(g => 
-                        g && 
-                        (String(g.time_elapsed).toLowerCase() === 'finished' || 
-                         g.finished === 'TRUE' || 
-                         g.finished === true)
+
+                    const finishedGames = games.filter(g =>
+                        g &&
+                        (String(g.time_elapsed).toLowerCase() === 'finished' ||
+                            g.finished === 'TRUE' ||
+                            g.finished === true)
                     );
 
-                    // 2. Sort safely to get the LATEST matches first. 
-                    // If API provides an ID, highest ID means latest match. Fallback to indexing order if identical.
                     finishedGames.sort((a, b) => {
                         const idA = a.id ? parseInt(a.id) : 0;
                         const idB = b.id ? parseInt(b.id) : 0;
                         return idB - idA;
                     });
 
-                    // 3. Extract the top 4 latest finished items
                     const selected = finishedGames.slice(0, 4);
 
                     const container = document.getElementById('live-scores-container');
                     if (container) {
-                        // Forces horizontal left-to-right flow behavior natively on the element wrapper
                         container.style.display = 'flex';
                         container.style.flexDirection = 'row';
                         container.style.flexWrap = 'nowrap';
                         container.style.alignItems = 'center';
                         container.style.justifyContent = 'flex-start';
                         container.style.width = '100%';
-                        
+
                         if (selected.length > 0) {
                             container.innerHTML = selected.map((game, i) => buildScoreCard(game, i)).join('');
                         } else {
@@ -592,7 +717,6 @@ if (file_exists($json_file)) {
                 .catch(err => {
                     console.error('Live score fetch failed:', err);
                     const container = document.getElementById('live-scores-container');
-                    // Fail gracefully without crashing the TV board UI layout
                     if (container && !container.innerHTML.trim()) {
                         container.innerHTML = '<div class="p-2 text-white-50 inter small">Scores temporarily unavailable</div>';
                     }
