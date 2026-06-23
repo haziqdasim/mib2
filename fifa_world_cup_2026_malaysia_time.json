@@ -228,9 +228,7 @@
             "stage": "Group Stage - Group K",
             "home_team": "Portugal",
             "away_team": "DR Congo",
-            "status": "Full-Time",
-            "home_score": 1,
-            "away_score": 1,
+            "status": "Upcoming",
             "malaysia_time": "2026-06-18 01:00",
             "day": "Thursday"
         },
@@ -239,9 +237,7 @@
             "stage": "Group Stage - Group L",
             "home_team": "England",
             "away_team": "Croatia",
-            "status": "Full-Time",
-            "home_score": 4,
-            "away_score": 2,
+            "status": "Upcoming",
             "malaysia_time": "2026-06-18 04:00",
             "day": "Thursday"
         },
@@ -250,9 +246,7 @@
             "stage": "Group Stage - Group L",
             "home_team": "Ghana",
             "away_team": "Panama",
-            "status": "Full-Time",
-            "home_score": 1,
-            "away_score": 0,
+            "status": "Upcoming",
             "malaysia_time": "2026-06-18 07:00",
             "day": "Thursday"
         },
@@ -261,9 +255,7 @@
             "stage": "Group Stage - Group K",
             "home_team": "Uzbekistan",
             "away_team": "Colombia",
-            "status": "Full-Time",
-            "home_score": 1,
-            "away_score": 3,
+            "status": "Upcoming",
             "malaysia_time": "2026-06-18 10:00",
             "day": "Thursday"
         },
@@ -272,9 +264,7 @@
             "stage": "Group Stage - Group A",
             "home_team": "Czech Republic",
             "away_team": "South Africa",
-            "status": "Full-Time",
-            "home_score": 1,
-            "away_score": 1,
+            "status": "Upcoming",
             "malaysia_time": "2026-06-19 00:00",
             "day": "Friday"
         },
@@ -283,9 +273,7 @@
             "stage": "Group Stage - Group B",
             "home_team": "Switzerland",
             "away_team": "Bosnia and Herzegovina",
-            "status": "Full-Time",
-            "home_score": 4,
-            "away_score": 1,
+            "status": "Upcoming",
             "malaysia_time": "2026-06-19 03:00",
             "day": "Friday"
         },
@@ -294,9 +282,7 @@
             "stage": "Group Stage - Group B",
             "home_team": "Canada",
             "away_team": "Qatar",
-            "status": "Full-Time",
-            "home_score": 6,
-            "away_score": 0,
+            "status": "Upcoming",
             "malaysia_time": "2026-06-19 06:00",
             "day": "Friday"
         },
@@ -305,9 +291,7 @@
             "stage": "Group Stage - Group A",
             "home_team": "Mexico",
             "away_team": "South Korea",
-            "status": "Full-Time",
-            "home_score": 1,
-            "away_score": 0,
+            "status": "Upcoming",
             "malaysia_time": "2026-06-19 09:00",
             "day": "Friday"
         },
@@ -317,7 +301,7 @@
             "home_team": "United States",
             "away_team": "Australia",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-20 03:00",
+            "malaysia_time": "2026-06-20 06:00",
             "day": "Saturday"
         },
         {
@@ -335,7 +319,7 @@
             "home_team": "Brazil",
             "away_team": "Haiti",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-20 08:30",
+            "malaysia_time": "2026-06-20 09:30",
             "day": "Saturday"
         },
         {
@@ -344,7 +328,7 @@
             "home_team": "Türkiye",
             "away_team": "Paraguay",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-20 11:00",
+            "malaysia_time": "2026-06-20 12:00",
             "day": "Saturday"
         },
         {
@@ -370,7 +354,9 @@
             "stage": "Group Stage - Group E",
             "home_team": "Ecuador",
             "away_team": "Curaçao",
-            "status": "Upcoming",
+            "home_score": 0,
+            "away_score": 0,
+            "status": "Full-Time",
             "malaysia_time": "2026-06-21 08:00",
             "day": "Sunday"
         },
@@ -379,7 +365,9 @@
             "stage": "Group Stage - Group F",
             "home_team": "Tunisia",
             "away_team": "Japan",
-            "status": "Upcoming",
+            "home_score": 0,
+            "away_score": 4,
+            "status": "Full-Time",
             "malaysia_time": "2026-06-21 12:00",
             "day": "Sunday"
         },
@@ -388,7 +376,9 @@
             "stage": "Group Stage - Group H",
             "home_team": "Spain",
             "away_team": "Saudi Arabia",
-            "status": "Upcoming",
+            "home_score": 4,
+            "away_score": 0,
+            "status": "Full-Time",
             "malaysia_time": "2026-06-22 00:00",
             "day": "Monday"
         },
@@ -397,7 +387,9 @@
             "stage": "Group Stage - Group G",
             "home_team": "Belgium",
             "away_team": "Iran",
-            "status": "Upcoming",
+            "home_score": 0,
+            "away_score": 0,
+            "status": "Full-Time",
             "malaysia_time": "2026-06-22 03:00",
             "day": "Monday"
         },
@@ -406,8 +398,10 @@
             "stage": "Group Stage - Group H",
             "home_team": "Uruguay",
             "away_team": "Cabo Verde",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-22 22:00",
+            "home_score": 2,
+            "away_score": 2,
+            "status": "Full-Time",
+            "malaysia_time": "2026-06-22 06:00",
             "day": "Monday"
         },
         {
@@ -415,8 +409,10 @@
             "stage": "Group Stage - Group G",
             "home_team": "New Zealand",
             "away_team": "Egypt",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-22 01:00",
+            "home_score": 1,
+            "away_score": 3,
+            "status": "Full-Time",
+            "malaysia_time": "2026-06-22 09:00",
             "day": "Monday"
         },
         {
@@ -424,18 +420,22 @@
             "stage": "Group Stage - Group I",
             "home_team": "France",
             "away_team": "Iraq",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-22 21:00",
-            "day": "Monday"
+            "home_score": 3,
+            "away_score": 0,
+            "status": "Full-Time",
+            "malaysia_time": "2026-06-23 05:00",
+            "day": "Tuesday"
         },
         {
             "match_id": 42,
             "stage": "Group Stage - Group J",
             "home_team": "Argentina",
             "away_team": "Austria",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-22 17:00",
-            "day": "Monday"
+            "home_score": 2,
+            "away_score": 0,
+            "status": "Full-Time",
+            "malaysia_time": "2026-06-23 01:00",
+            "day": "Tuesday"
         },
         {
             "match_id": 43,
@@ -443,7 +443,7 @@
             "home_team": "Norway",
             "away_team": "Senegal",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-23 00:00",
+            "malaysia_time": "2026-06-23 08:00",
             "day": "Tuesday"
         },
         {
@@ -452,7 +452,7 @@
             "home_team": "Jordan",
             "away_team": "Algeria",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-23 03:00",
+            "malaysia_time": "2026-06-23 11:00",
             "day": "Tuesday"
         },
         {
@@ -461,8 +461,8 @@
             "home_team": "Portugal",
             "away_team": "Uzbekistan",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-23 06:00",
-            "day": "Tuesday"
+            "malaysia_time": "2026-06-24 01:00",
+            "day": "Wednesday"
         },
         {
             "match_id": 46,
@@ -470,242 +470,242 @@
             "home_team": "England",
             "away_team": "Ghana",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-23 09:00",
-            "day": "Tuesday"
+            "malaysia_time": "2026-06-24 04:00",
+            "day": "Wednesday"
         },
         {
             "match_id": 47,
-            "stage": "Group Stage - Group K",
-            "home_team": "Colombia",
-            "away_team": "DR Congo",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-23 12:00",
-            "day": "Tuesday"
-        },
-        {
-            "match_id": 48,
             "stage": "Group Stage - Group L",
             "home_team": "Panama",
             "away_team": "Croatia",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-23 21:00",
-            "day": "Tuesday"
-        },
-        {
-            "match_id": 49,
-            "stage": "Group Stage - Group A",
-            "home_team": "South Korea",
-            "away_team": "South Africa",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-24 09:00",
+            "malaysia_time": "2026-06-24 07:00",
             "day": "Wednesday"
         },
         {
-            "match_id": 50,
+            "match_id": 48,
+            "stage": "Group Stage - Group K",
+            "home_team": "Colombia",
+            "away_team": "DR Congo",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-24 10:00",
+            "day": "Wednesday"
+        },
+        {
+            "match_id": 49,
             "stage": "Group Stage - Group B",
             "home_team": "Switzerland",
             "away_team": "Canada",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-24 06:00",
-            "day": "Wednesday"
+            "malaysia_time": "2026-06-25 03:00",
+            "day": "Thursday"
         },
         {
-            "match_id": 51,
+            "match_id": 50,
             "stage": "Group Stage - Group B",
             "home_team": "Bosnia and Herzegovina",
             "away_team": "Qatar",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-24 06:00",
-            "day": "Wednesday"
-        },
-        {
-            "match_id": 52,
-            "stage": "Group Stage - Group A",
-            "home_team": "Czech Republic",
-            "away_team": "Mexico",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-24 09:00",
-            "day": "Wednesday"
-        },
-        {
-            "match_id": 53,
-            "stage": "Group Stage - Group D",
-            "home_team": "Paraguay",
-            "away_team": "Australia",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-25 04:00",
+            "malaysia_time": "2026-06-25 03:00",
             "day": "Thursday"
         },
         {
-            "match_id": 54,
-            "stage": "Group Stage - Group C",
-            "home_team": "Scotland",
-            "away_team": "Brazil",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-24 21:00",
-            "day": "Wednesday"
-        },
-        {
-            "match_id": 55,
+            "match_id": 51,
             "stage": "Group Stage - Group C",
             "home_team": "Morocco",
             "away_team": "Haiti",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-24 21:00",
-            "day": "Wednesday"
-        },
-        {
-            "match_id": 56,
-            "stage": "Group Stage - Group D",
-            "home_team": "Türkiye",
-            "away_team": "United States",
-            "status": "Upcoming",
-            "malaysia_time": "2026-06-25 04:00",
+            "malaysia_time": "2026-06-25 06:00",
             "day": "Thursday"
         },
         {
-            "match_id": 57,
-            "stage": "Group Stage - Group E",
-            "home_team": "Curaçao",
-            "away_team": "Ivory Coast",
+            "match_id": 52,
+            "stage": "Group Stage - Group C",
+            "home_team": "Scotland",
+            "away_team": "Brazil",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-26 04:00",
-            "day": "Friday"
+            "malaysia_time": "2026-06-25 06:00",
+            "day": "Thursday"
+        },
+        {
+            "match_id": 53,
+            "stage": "Group Stage - Group A",
+            "home_team": "South Africa",
+            "away_team": "South Korea",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-25 09:00",
+            "day": "Thursday"
+        },
+        {
+            "match_id": 54,
+            "stage": "Group Stage - Group A",
+            "home_team": "Czech Republic",
+            "away_team": "Mexico",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-25 09:00",
+            "day": "Thursday"
+        },
+        {
+            "match_id": 55,
+            "stage": "Group Stage - Match 55",
+            "home_team": "TBD",
+            "away_team": "TBD",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
+        },
+        {
+            "match_id": 56,
+            "stage": "Group Stage - Match 56",
+            "home_team": "TBD",
+            "away_team": "TBD",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
+        },
+        {
+            "match_id": 57,
+            "stage": "Group Stage - Match 57",
+            "home_team": "TBD",
+            "away_team": "TBD",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 58,
-            "stage": "Group Stage - Group E",
-            "home_team": "Ecuador",
-            "away_team": "Germany",
+            "stage": "Group Stage - Match 58",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-26 04:00",
-            "day": "Friday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 59,
-            "stage": "Group Stage - Group F",
-            "home_team": "Tunisia",
-            "away_team": "Netherlands",
+            "stage": "Group Stage - Match 59",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-26 09:00",
-            "day": "Friday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 60,
-            "stage": "Group Stage - Group F",
-            "home_team": "Japan",
-            "away_team": "Sweden",
+            "stage": "Group Stage - Match 60",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-26 09:00",
-            "day": "Friday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 61,
-            "stage": "Group Stage - Group H",
-            "home_team": "Cabo Verde",
-            "away_team": "Saudi Arabia",
+            "stage": "Group Stage - Match 61",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-27 04:00",
-            "day": "Saturday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 62,
-            "stage": "Group Stage - Group H",
-            "home_team": "Uruguay",
-            "away_team": "Spain",
+            "stage": "Group Stage - Match 62",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-27 04:00",
-            "day": "Saturday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 63,
-            "stage": "Group Stage - Group G",
-            "home_team": "Egypt",
-            "away_team": "Iran",
+            "stage": "Group Stage - Match 63",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-27 09:00",
-            "day": "Saturday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 64,
-            "stage": "Group Stage - Group G",
-            "home_team": "New Zealand",
-            "away_team": "Belgium",
+            "stage": "Group Stage - Match 64",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-27 09:00",
-            "day": "Saturday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 65,
-            "stage": "Group Stage - Group I",
-            "home_team": "Norway",
-            "away_team": "France",
+            "stage": "Group Stage - Match 65",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-28 04:00",
-            "day": "Sunday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 66,
-            "stage": "Group Stage - Group I",
-            "home_team": "Senegal",
-            "away_team": "Iraq",
+            "stage": "Group Stage - Match 66",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-28 04:00",
-            "day": "Sunday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 67,
-            "stage": "Group Stage - Group J",
-            "home_team": "Austria",
-            "away_team": "Algeria",
+            "stage": "Group Stage - Match 67",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-28 09:00",
-            "day": "Sunday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 68,
-            "stage": "Group Stage - Group J",
-            "home_team": "Jordan",
-            "away_team": "Argentina",
+            "stage": "Group Stage - Match 68",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-28 09:00",
-            "day": "Sunday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 69,
-            "stage": "Group Stage - Group K",
-            "home_team": "Colombia",
-            "away_team": "Portugal",
+            "stage": "Group Stage - Match 69",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-28 12:00",
-            "day": "Sunday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 70,
-            "stage": "Group Stage - Group K",
-            "home_team": "DR Congo",
-            "away_team": "Uzbekistan",
+            "stage": "Group Stage - Match 70",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-28 12:00",
-            "day": "Sunday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 71,
-            "stage": "Group Stage - Group L",
-            "home_team": "Panama",
-            "away_team": "England",
+            "stage": "Group Stage - Match 71",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-28 12:00",
-            "day": "Sunday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 72,
-            "stage": "Group Stage - Group L",
-            "home_team": "Croatia",
-            "away_team": "Ghana",
+            "stage": "Group Stage - Match 72",
+            "home_team": "TBD",
+            "away_team": "TBD",
             "status": "Upcoming",
-            "malaysia_time": "2026-06-28 12:00",
-            "day": "Sunday"
+            "malaysia_time": "2026-06-26 to 2026-06-27 (Various Times)",
+            "day": "Various Days"
         },
         {
             "match_id": 73,
@@ -715,6 +715,276 @@
             "status": "Upcoming",
             "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
             "day": "TBD"
+        },
+        {
+            "match_id": 74,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 75,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 76,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 77,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 78,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 79,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 80,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 81,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 82,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 83,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 84,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 85,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 86,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 87,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 88,
+            "stage": "Round of 32",
+            "home_team": "Winner/Runner-up Group Slot",
+            "away_team": "Winner/Runner-up/3rd Place Slot",
+            "status": "Upcoming",
+            "malaysia_time": "2026-06-29 to 2026-07-04 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 89,
+            "stage": "Round of 16",
+            "home_team": "Winner Round of 32",
+            "away_team": "Winner Round of 32",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-04 to 2026-07-08 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 90,
+            "stage": "Round of 16",
+            "home_team": "Winner Round of 32",
+            "away_team": "Winner Round of 32",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-04 to 2026-07-08 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 91,
+            "stage": "Round of 16",
+            "home_team": "Winner Round of 32",
+            "away_team": "Winner Round of 32",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-04 to 2026-07-08 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 92,
+            "stage": "Round of 16",
+            "home_team": "Winner Round of 32",
+            "away_team": "Winner Round of 32",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-04 to 2026-07-08 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 93,
+            "stage": "Round of 16",
+            "home_team": "Winner Round of 32",
+            "away_team": "Winner Round of 32",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-04 to 2026-07-08 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 94,
+            "stage": "Round of 16",
+            "home_team": "Winner Round of 32",
+            "away_team": "Winner Round of 32",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-04 to 2026-07-08 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 95,
+            "stage": "Round of 16",
+            "home_team": "Winner Round of 32",
+            "away_team": "Winner Round of 32",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-04 to 2026-07-08 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 96,
+            "stage": "Round of 16",
+            "home_team": "Winner Round of 32",
+            "away_team": "Winner Round of 32",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-04 to 2026-07-08 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 97,
+            "stage": "Quarter-finals",
+            "home_team": "Winner Round of 16",
+            "away_team": "Winner Round of 16",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-10 to 2026-07-12 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 98,
+            "stage": "Quarter-finals",
+            "home_team": "Winner Round of 16",
+            "away_team": "Winner Round of 16",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-10 to 2026-07-12 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 99,
+            "stage": "Quarter-finals",
+            "home_team": "Winner Round of 16",
+            "away_team": "Winner Round of 16",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-10 to 2026-07-12 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 100,
+            "stage": "Quarter-finals",
+            "home_team": "Winner Round of 16",
+            "away_team": "Winner Round of 16",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-10 to 2026-07-12 (TBD)",
+            "day": "TBD"
+        },
+        {
+            "match_id": 101,
+            "stage": "Semi-finals",
+            "home_team": "Winner QF1",
+            "away_team": "Winner QF2",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-15 03:00",
+            "day": "Wednesday"
+        },
+        {
+            "match_id": 102,
+            "stage": "Semi-finals",
+            "home_team": "Winner QF3",
+            "away_team": "Winner QF4",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-16 03:00",
+            "day": "Thursday"
+        },
+        {
+            "match_id": 103,
+            "stage": "Third-place Playoff",
+            "home_team": "Loser SF1",
+            "away_team": "Loser SF2",
+            "status": "Upcoming",
+            "malaysia_time": "2026-07-19 03:00",
+            "day": "Sunday"
         },
         {
             "match_id": 104,
